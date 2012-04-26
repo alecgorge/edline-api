@@ -60,7 +60,6 @@ class Cache
 			FileUtils.mkdir_p(d, :mode => 0777)
 		end
 
-		puts "Storing '%s' as '%s'" % [name.join(', '), f]
 		File.open(f, "w+") { |file|
 			file.write({"payload" => value}.to_json)
 		}
