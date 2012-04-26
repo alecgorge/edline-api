@@ -3,7 +3,7 @@ chdir: ./
 address: 127.0.0.1
 user: nginx
 group: nginx
-port: 456
+port: 4567
 pid: ./thin/tmp/thin.pid
 rackup: config.ru
 log: ./thin/log/thin.log
