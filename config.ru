@@ -3,6 +3,7 @@ require 'sinatra'
 
 set :env, :production
 set :run, false
+set :port, 4567
 
 require './edline'
 
