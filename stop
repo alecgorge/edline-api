@@ -1,3 +1,3 @@
 #!/bin/bash
 
-thin -C thin.yml -R config.ru stop
+thin -C thin/thin.yml -R config.ru stop

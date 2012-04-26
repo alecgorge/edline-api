@@ -1,9 +1,9 @@
 
-require './fields'
+require './edline-api/fields'
 require 'httpclient'
 require 'sinatra/reloader'
 require 'nokogiri'
-require './edline-class'
+require './edline-api/edline-class'
 require 'digest/sha2'
 
 class User

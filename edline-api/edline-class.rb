@@ -1,5 +1,5 @@
 
-require './fields'
+require './edline-api/fields'
 require 'nokogiri'
 require 'date'
 

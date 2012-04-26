@@ -6,11 +6,11 @@
 development = false
 
 require 'sinatra'
-require './messages'
+require './edline-api/messages'
 require 'json'
-require './user'
-require './edline-item'
-require './cache'
+require './edline-api/user'
+require './edline-api/edline-item'
+require './edline-api/cache'
 require 'sinatra/reloader' if development
 require 'digest/md5'
 require 'uri'
