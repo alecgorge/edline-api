@@ -2,16 +2,10 @@
 class Fields
 	def self.login_fields(u,p)
 		{
-			'submitEvent' 		=> 1,
-			'TCNK' 				=> 'authenticationEntryComponent',
-			'guestLoginEvent' 	=> '',
-			'enterClicked' 		=> true,
-			'bscf' 				=> '',
-			'bscv' 				=> '',
-			'targetEntid' 		=> '',
-			'ajaxSupported' 	=> 'yes',
-			'screenName' 		=> u,
-			'kclq' 				=> p
+			'loginEvent'	=> '1',
+			'un'			=> u,
+			'kscf'			=> p,
+			'login'			=> "Log In"
 		}
 	end
 

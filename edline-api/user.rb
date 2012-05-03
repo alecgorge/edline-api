@@ -18,7 +18,7 @@ class User
 		@password = p
 
 		@cache = c
-		@client = HTTPClient.new
+		@client = HTTPClient.new(:agent_name = 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B176 Safari/7534.48.3')
 		@client.follow_redirect_count = 10
 
 		@isPrimed = false # if loaded from cache, but a class needs a reload
@@ -55,6 +55,12 @@ class User
 		return s
 	end
 
+	def _extract_classes_from_dom(dom)
+		dom.css('.navList a').map { |link|
+			link['href'].split('/')[-1] # get the class id
+		}
+	end
+
 	def data
 		# check if there is a cache of the classes list
 		h = Digest::SHA2.new << @username << ":::" << @password
@@ -84,45 +90,33 @@ class User
 		# valid logins go to the school page. we better fetch that.
 		homepage = @client.get location
 
+		# holds all the student information
+		students = {}
+
 		# start parsing
 		dom = Nokogiri::HTML(homepage.content)
 
 		# looking in the header menu because it is the only place where all the necessary
 		# content exists
-		shortcuts = dom.at_css '#myShortcutsItem'
+		all_people = dom.css('option')
 
-		all_people = shortcuts.css('div[type=menu]')
-
-		# holds all the student information
-		students = {}
-
-		# detect if parent
-		if all_people[0] != nil && all_people[0]['id'].index('userShortcuts') != nil
-			# remove the parent, they don't have classes
-			all_people.shift
-
-			all_people.each { |child|
-				child_classes = child.children.css('div[type=item]')
-
-				separator_position = child_classes.index(child_classes.css('#Separator1')[0]) - 1
-
-				students[child['title']] = child_classes[0..separator_position]
-			}
+		# if true, this is a student login
+		if all_people == nil
+			classes[@username] = _extract_classes_from_dom(dom)
 		else
-			# get the name
-			name = dom.at_css('#userShortcuts0 a').content
+			all_people.shift # remove the parent
 
-			child_classes = shortcuts.css('div[type=item]')
+			all_people.each { |stud| 
+				fields = {
+					'selectViewAsEvent' => '1',
+					'viewAsEntid' => stud['value']
+				}
 
-			separator_position = child_classes.index(child_classes.css('#Separator1')[0]) - 1
+				class_page = @client.post('https://www.edline.net/post/MyClasses.page',
+											:body => fields,
+											:header => {'Referer' => 'https://www.edline.net/post/MyClasses.page'})
 
-			students[name] = child_classes[0..separator_position]
-		end
-
-		students.each do |name, student| # student is a NodeSet
-			# get all the Edline IDs for the classes
-			students[name] = student.map { |node|
-				node.attr('action').match(/code:mcViewItm\('([0-9]+)'/)[1]
+				students[stud.content.trim!] = _extract_classes_from_dom(Nokogiri::HTML(class_page.content))
 			}
 		end
 
