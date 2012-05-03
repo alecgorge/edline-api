@@ -29,7 +29,8 @@ class User
 	end
 
 	def prime_cookies
-		@client.get("https://www.edline.net/Index.page")
+		# this isn't needed!?
+		# @client.get("https://www.edline.net/Index.page")
 		@isPrimed = true
 	end
 
@@ -116,7 +117,7 @@ class User
 											:body => fields,
 											:header => {'Referer' => 'https://www.edline.net/post/MyClasses.page'})
 
-				students[stud.content.trim!] = _extract_classes_from_dom(Nokogiri::HTML(class_page.content))
+				students[stud['title']] = _extract_classes_from_dom(Nokogiri::HTML(class_page.content))
 			}
 		end
 

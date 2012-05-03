@@ -75,6 +75,7 @@ class EdlineItem
 		dom = Nokogiri::HTML(item_page.content)
 
 		# check for a HTML view
+		# NOTE this may not be possible anymore
 		html_block = dom.at_css('#DocViewBoxContent')
 		if html_block != nil
 			@type = 'html'
@@ -87,7 +88,7 @@ class EdlineItem
 		end
 
 		# check for iframe'd content (usually grades)
-		iframe_block = dom.at_css('#docViewBodyFrame')
+		iframe_block = dom.at_css('#docViewBodyIframe')
 		if iframe_block != nil
 			@type = 'iframe'
 			@content = {
@@ -104,11 +105,8 @@ class EdlineItem
 			@content = []
 
 			dir.each { |link|
-				isFile = link['href'][0..6] == '/files/'
-				title = link.content.strip
-				id = isFile ?
-						link['href'] :
-						link['href'][22,19] # from pos 22 for 19 chars
+				title = link['title']
+				id = link['href'].split('/')[6..-1].join('/') # remove everything up to Brebeuf/Classes/
 
 				@content.push({
 					'name' => title,
