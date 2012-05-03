@@ -1,11 +1,14 @@
 
 require './edline-api/fields'
+require './edline-api/edline-file'
 require 'nokogiri'
 require 'date'
+require 'uri'
 
 class EdlineItem
 	def initialize(id, user)
-		@id = id
+		@id = id # this is now a partial URL (1112_058339201 or 1112_058339201/Assignments)
+		@url = "https://www.edline.net/pages/Brebeuf/Classes/" << id
 		@user = user
 		@type = "html"
 		@content = "<p>Well this is odd. I shouldn't be here.</p>"
@@ -33,24 +36,8 @@ class EdlineItem
 							   # to be so if a class is being requested
 		end
 
-		# let's see if we already have the path to class cached
-		cache_name = ["items", @id, "url"]
-		url = @cache.get(cache_name, nil, Cache::ITEM_URL_DURATION)
-
-		if url == nil
-			# unfortunately, cache miss so we have to make a POST and follow the redirect
-			# also we will save it for later
-			url = @cache.set(cache_name,
-							 Fields.submit_event(@client, Fields.item_fields(@id))
-							 	   .headers["Location"])
-		end
-
-		c = @client.get(url,
+		c = @client.get(@url,
 						:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
-
-		while c.headers['Location'] != nil
-			c = @client.get(c.headers['Location'])
-		end
 
 		return c
 	end
@@ -75,6 +62,15 @@ class EdlineItem
 		end
 
 		item_page = self.request_item
+
+		if item_page.headers['Location'] != nil
+			file = URI(item_page.headers["Location"]).path
+
+			@type = 'file'
+			@content = EdlineFile.fetch_file(@cache, file, @user)
+
+			return _data
+		end
 
 		dom = Nokogiri::HTML(item_page.content)
 
@@ -102,12 +98,12 @@ class EdlineItem
 		end
 
 		# check for a directory listing
-		dir = dom.at_css('#fsvItemsTable')
+		dir = dom.css('.navItem a')
 		if dir != nil
 			@type = 'folder'
 			@content = []
 
-			dir.css('a').each { |link|
+			dir.each { |link|
 				isFile = link['href'][0..6] == '/files/'
 				title = link.content.strip
 				id = isFile ?
@@ -116,7 +112,7 @@ class EdlineItem
 
 				@content.push({
 					'name' => title,
-					'isFile' => isFile,
+					'isFile' => false, # we can never tell if stuff is a file anymore
 					'id' => id
 				})
 			}
