@@ -137,7 +137,7 @@ class User
 							  # to be so if a class is being requested
 			end
 
-			page = Fields.submit_event(@client, Fields.private_reports_fields())
+			page = @client.get "https://www.edline.net/UserDocList.page"
 
 			while page.headers["Location"] != nil
 				page = @client.get(page.headers['Location'])
@@ -147,30 +147,35 @@ class User
 
 			cached_data = []
 
-			dom.css('.ed-formTable tr')[2..-1].each { |row|
-				tds = row.css('td')
-				name = tds[5].content.strip
+			titles = dom.css('.navSectionBar')
+			reports = dom.css('.navList')
 
-				if ['Demographics',
-					'Line Schedules',
-					'Grid Schedules'].include? name
-					next
-				end
+			titles.each_index { |i|
+				title = titles[i]
+				reports[i].css('.navItem a').each { |a|
+					name = a['title']
 
-				date = tds[2].content.strip
-				date = Date.new(("20"+date[6, 2]).to_i, # year
-							date[0, 2].to_i,			# month
-							date[3,2].to_i)				# day
-					   .to_time
-					   .utc								# make sure everything is the same timezone
-					   .to_i
+					if ['Demographics',
+						'Line Schedules',
+						'Grid Schedules'].include? name
+						next
+					end
 
-				cached_data.push({
-					'date' => date,
-					'item_id' => tds[3].at_css('a')['href'][22..-4],
-					'class' => tds[4].at_css('a').content.strip,
-					'name' => name
-				})
+					year = a.at_css('dateYear').content
+					month, num = a.at_css('dateNum').content.split(' ')
+
+					date = Time.utc(("20"+year).to_i,	# year
+									month,				# month (3 letters)
+									num.to_i)			# day
+							   .to_i
+
+					cached_data.push({
+						'date' => date,
+						'item_id' => a['href'].split('/')[6..-1].join('/'),
+						'class' => title,
+						'name' => name
+					})
+				}
 			}
 		end
 
