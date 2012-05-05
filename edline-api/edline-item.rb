@@ -36,6 +36,7 @@ class EdlineItem
 							   # to be so if a class is being requested
 		end
 
+		puts @url
 		c = @client.get(@url,
 						:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
 
@@ -100,7 +101,7 @@ class EdlineItem
 
 		# check for a directory listing
 		dir = dom.css('.navItem a')
-		if dir != nil
+		if dir.length > 0
 			@type = 'folder'
 			@content = []
 

@@ -21,13 +21,7 @@ class Fields
 	def self.event_fields(invokeEvent, eventParams)
 		{
 			'invokeEvent' 							=> invokeEvent,
-			'eventParms' 							=> eventParams,
-			'sessionRenewalEnabled' 				=> 'yes',
-			'sessionRenewalIntervalSeconds' 		=> '300',
-			'sessionRenewalMaxNumberOfRenewals' 	=> '25',
-			'sessionIgnoreInitialActivitySeconds' 	=> '90',
-			'sessionHardTimeoutSeconds' 			=> '1200',
-			'ajaxRequestKeySuffix' 					=> '0'
+			'eventParms' 							=> eventParams
 		}
 	end
 
@@ -38,7 +32,6 @@ class Fields
 	def self.submit_event(client, fields)
 		client.post('https://www.edline.net/post/GroupHome.page',
 					:body => fields,
-					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'},
-					:follow_redirect => false)
+					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
 	end
 end

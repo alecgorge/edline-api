@@ -18,7 +18,7 @@ class User
 		@password = p
 
 		@cache = c
-		@client = HTTPClient.new(:agent_name = 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B176 Safari/7534.48.3')
+		@client = HTTPClient.new(:agent_name => 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B176 Safari/7534.48.3')
 		@client.follow_redirect_count = 10
 
 		@isPrimed = false # if loaded from cache, but a class needs a reload
@@ -89,7 +89,8 @@ class User
 		end
 
 		# valid logins go to the school page. we better fetch that.
-		homepage = @client.get location
+		# class listings are now on a separate page so we have to go there first
+		homepage = @client.get Fields.submit_event(@client, Fields.event_fields('myClasses', 'TCNK=mobileHelper')).headers["Location"]
 
 		# holds all the student information
 		students = {}
@@ -101,9 +102,9 @@ class User
 		# content exists
 		all_people = dom.css('option')
 
-		# if true, this is a student login
-		if all_people == nil
-			classes[@username] = _extract_classes_from_dom(dom)
+		# if true, this is a student login because only parents have a dropdown for student listing
+		if all_people.length == 0
+			students[@username] = _extract_classes_from_dom(dom)
 		else
 			all_people.shift # remove the parent
 

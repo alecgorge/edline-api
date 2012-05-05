@@ -3,8 +3,7 @@
 # requires sinatra json sinatra-contrib nokogiri httpclient thin
 # also need libxml2-dev
 
-development = false
-
+require 'rubygems'
 require 'sinatra'
 require './edline-api/messages'
 require 'json'
@@ -12,10 +11,12 @@ require './edline-api/user'
 require './edline-api/edline-item'
 require './edline-api/edline-file'
 require './edline-api/cache'
-require 'sinatra/reloader' if development
+require 'sinatra/reloader'
 require 'digest/md5'
 
-cache = Cache.new('cache', 60 * 60)
+set :app_file, __FILE__
+
+cache = Cache.new('./cache', 60 * 60)
 
 module Sinatra
 
