@@ -11,7 +11,7 @@ class EdlineItem
 		@content = "<p>Well this is odd. I shouldn't be here.</p>"
 		@client = user.client
 		@cache = user.cache
-		@cache_file = ["items", @id, "payload"]
+		@cache_file = ["items", @id, @user.username, "payload"]
 
 		@fetched = false
 
