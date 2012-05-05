@@ -24,7 +24,15 @@ class Cache
 			p = name.join("/")
 			p = Digest::MD5.new << p
 			p = p.to_s << ".txt"
-			p = File.join(@cache_dir, p)
+
+			# organize into folders so we don't end up with 100k+ files in one dir
+			d = File.join(@cache_dir, p[0,2])
+
+			if !File.directory?(d)
+				FileUtils.mkdir_p(d, :mode => 0777)
+			end
+
+			p = File.join(d, p)
 		end
 
 		p
@@ -36,7 +44,7 @@ class Cache
 		f = self.path(*name)
 		d = File.dirname(f)
 
-		if !File.exists?(f) || !SHOULD_CACHE
+		if !SHOULD_CACHE || !File.exists?(f)
 			return default
 		end
 
