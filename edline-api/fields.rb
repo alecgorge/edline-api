@@ -2,10 +2,16 @@
 class Fields
 	def self.login_fields(u,p)
 		{
-			'loginEvent'	=> '1',
-			'un'			=> u,
-			'kscf'			=> p,
-			'login'			=> "Log In"
+			'submitEvent' 		=> 1,
+			'TCNK' 				=> 'authenticationEntryComponent',
+			'guestLoginEvent' 	=> '',
+			'enterClicked' 		=> true,
+			'bscf' 				=> '',
+			'bscv' 				=> '',
+			'targetEntid' 		=> '',
+			'ajaxSupported' 	=> 'yes',
+			'screenName' 		=> u,
+			'kclq' 				=> p
 		}
 	end
 
@@ -21,7 +27,13 @@ class Fields
 	def self.event_fields(invokeEvent, eventParams)
 		{
 			'invokeEvent' 							=> invokeEvent,
-			'eventParms' 							=> eventParams
+			'eventParms' 							=> eventParams,
+			'sessionRenewalEnabled' 				=> 'yes',
+			'sessionRenewalIntervalSeconds' 		=> '300',
+			'sessionRenewalMaxNumberOfRenewals' 	=> '25',
+			'sessionIgnoreInitialActivitySeconds' 	=> '90',
+			'sessionHardTimeoutSeconds' 			=> '1200',
+			'ajaxRequestKeySuffix' 					=> '0'
 		}
 	end
 
@@ -32,6 +44,7 @@ class Fields
 	def self.submit_event(client, fields)
 		client.post('https://www.edline.net/post/GroupHome.page',
 					:body => fields,
-					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
+					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'},
+					:follow_redirect => false)
 	end
 end

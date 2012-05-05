@@ -3,20 +3,19 @@
 # requires sinatra json sinatra-contrib nokogiri httpclient thin
 # also need libxml2-dev
 
-require 'rubygems'
+development = false
+
 require 'sinatra'
 require './edline-api/messages'
 require 'json'
 require './edline-api/user'
 require './edline-api/edline-item'
-require './edline-api/edline-file'
 require './edline-api/cache'
-require 'sinatra/reloader'
+require 'sinatra/reloader' if development
 require 'digest/md5'
+require 'uri'
 
-set :app_file, __FILE__
-
-cache = Cache.new('./cache', 60 * 60)
+cache = Cache.new('cache', 60 * 60)
 
 module Sinatra
 
@@ -71,7 +70,32 @@ end
 
 post '/file' do
 	if params.has_key?("file")
-		return Messages.success(EdlineFile.fetch_file(cache, params['file'])).to_json
+		uri = URI::parse(params['file'])
+		name = params['file'][7..-1]
+		cache_name = ['cache', '__files__'] + name.split('/')
+		q = File.join(*cache_name)
+
+		if !File.exists?(q)
+			FileUtils.mkdir_p(File.join(cache_name[0..-2]), :mode => 0777)
+
+			user = User.new(@username, @password, cache)
+			if !user.isPrimed
+				user.prime_cookies
+
+				user.user_homepage # no need to check if valid; it is assumed
+								   # to be so if a class is being requested
+			end
+
+			file = user.client.get('https://www.edline.net' + params['file'])
+
+			File.open(q, "w+") { |f|
+				f.write(file.content)
+			}
+		end
+
+		return Messages.success({
+			'file' => cache_name.join('/')
+		}).to_json
 	end
 end
 

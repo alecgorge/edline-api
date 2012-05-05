@@ -18,7 +18,7 @@ class User
 		@password = p
 
 		@cache = c
-		@client = HTTPClient.new(:agent_name => 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B176 Safari/7534.48.3')
+		@client = HTTPClient.new
 		@client.follow_redirect_count = 10
 
 		@isPrimed = false # if loaded from cache, but a class needs a reload
@@ -29,8 +29,7 @@ class User
 	end
 
 	def prime_cookies
-		# this isn't needed!?
-		# @client.get("https://www.edline.net/Index.page")
+		@client.get("https://www.edline.net/Index.page")
 		@isPrimed = true
 	end
 
@@ -54,12 +53,6 @@ class User
 		end
 
 		return s
-	end
-
-	def _extract_classes_from_dom(dom)
-		dom.css('.navList a').map { |link|
-			link['href'].split('/')[-1] # get the class id
-		}
 	end
 
 	def data
@@ -89,36 +82,47 @@ class User
 		end
 
 		# valid logins go to the school page. we better fetch that.
-		# class listings are now on a separate page so we have to go there first
-		homepage = @client.get Fields.submit_event(@client, Fields.event_fields('myClasses', 'TCNK=mobileHelper')).headers["Location"]
-
-		# holds all the student information
-		students = {}
+		homepage = @client.get location
 
 		# start parsing
 		dom = Nokogiri::HTML(homepage.content)
 
 		# looking in the header menu because it is the only place where all the necessary
 		# content exists
-		all_people = dom.css('option')
+		shortcuts = dom.at_css '#myShortcutsItem'
 
-		# if true, this is a student login because only parents have a dropdown for student listing
-		if all_people.length == 0
-			students[@username] = _extract_classes_from_dom(dom)
+		all_people = shortcuts.css('div[type=menu]')
+
+		# holds all the student information
+		students = {}
+
+		# detect if parent
+		if all_people[0] != nil && all_people[0]['id'].index('userShortcuts') != nil
+			# remove the parent, they don't have classes
+			all_people.shift
+
+			all_people.each { |child|
+				child_classes = child.children.css('div[type=item]')
+
+				separator_position = child_classes.index(child_classes.css('#Separator1')[0]) - 1
+
+				students[child['title']] = child_classes[0..separator_position]
+			}
 		else
-			all_people.shift # remove the parent
+			# get the name
+			name = dom.at_css('#userShortcuts0 a').content
 
-			all_people.each { |stud| 
-				fields = {
-					'selectViewAsEvent' => '1',
-					'viewAsEntid' => stud['value']
-				}
+			child_classes = shortcuts.css('div[type=item]')
 
-				class_page = @client.post('https://www.edline.net/post/MyClasses.page',
-											:body => fields,
-											:header => {'Referer' => 'https://www.edline.net/post/MyClasses.page'})
+			separator_position = child_classes.index(child_classes.css('#Separator1')[0]) - 1
 
-				students[stud['title']] = _extract_classes_from_dom(Nokogiri::HTML(class_page.content))
+			students[name] = child_classes[0..separator_position]
+		end
+
+		students.each do |name, student| # student is a NodeSet
+			# get all the Edline IDs for the classes
+			students[name] = student.map { |node|
+				node.attr('action').match(/code:mcViewItm\('([0-9]+)'/)[1]
 			}
 		end
 
@@ -138,7 +142,7 @@ class User
 							  # to be so if a class is being requested
 			end
 
-			page = @client.get "https://www.edline.net/UserDocList.page"
+			page = Fields.submit_event(@client, Fields.private_reports_fields())
 
 			while page.headers["Location"] != nil
 				page = @client.get(page.headers['Location'])
@@ -148,35 +152,30 @@ class User
 
 			cached_data = []
 
-			titles = dom.css('.navSectionBar')
-			reports = dom.css('.navList')
+			dom.css('.ed-formTable tr')[2..-1].each { |row|
+				tds = row.css('td')
+				name = tds[5].content.strip
 
-			titles.each_index { |i|
-				title = titles[i]
-				reports[i].css('.navItem a').each { |a|
-					name = a['title']
+				if ['Demographics',
+					'Line Schedules',
+					'Grid Schedules'].include? name
+					next
+				end
 
-					if ['Demographics',
-						'Line Schedules',
-						'Grid Schedules'].include? name
-						next
-					end
+				date = tds[2].content.strip
+				date = Date.new(("20"+date[6, 2]).to_i, # year
+							date[0, 2].to_i,			# month
+							date[3,2].to_i)				# day
+					   .to_time
+					   .utc								# make sure everything is the same timezone
+					   .to_i
 
-					year = a.at_css('dateYear').content
-					month, num = a.at_css('dateNum').content.split(' ')
-
-					date = Time.utc(("20"+year).to_i,	# year
-									month,				# month (3 letters)
-									num.to_i)			# day
-							   .to_i
-
-					cached_data.push({
-						'date' => date,
-						'item_id' => a['href'].split('/')[6..-1].join('/'),
-						'class' => title,
-						'name' => name
-					})
-				}
+				cached_data.push({
+					'date' => date,
+					'item_id' => tds[3].at_css('a')['href'][22..-4],
+					'class' => tds[4].at_css('a').content.strip,
+					'name' => name
+				})
 			}
 		end
 
