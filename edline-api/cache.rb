@@ -10,6 +10,7 @@ class Cache
 	ITEM_DURATION 		= 60 * 60 * 2			# 2 hours
 	REPORT_DURATION		= 60 * 60 * 2			# 2 hours
 	SHOULD_FLATTEN 		= true
+	SHOULD_CACHE 		= true
 
 	def initialize(cache_dir, length)
 		@cache_dir = cache_dir
@@ -35,7 +36,7 @@ class Cache
 		f = self.path(*name)
 		d = File.dirname(f)
 
-		if !File.exists?(f)
+		if !File.exists?(f) || !SHOULD_CACHE
 			return default
 		end
 
