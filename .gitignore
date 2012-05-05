@@ -1,3 +1,4 @@
 cache/*.txt
+cache/*/*.txt
 cache/__files__/*
 .DS_Store
