@@ -81,7 +81,12 @@ class EdlineClass
 		begin # we may need to rescue
 			@class_name = dom.at_css('#edlHomePageDocBoxAreaTitleSpan').content.strip
 
-			@teacher = dom.at_css('#GroupMessageBoxContent b').content.strip
+			@teacher = dom.at_css('#GroupMessageBoxContent b')
+			if @teacher != nil 
+				@teacher = @teacher.content.strip
+			else
+				@teacher = ""
+			end
 
 			# get calendar items
 			raw_cal = dom.css('#CalendarBoxContent tr')
