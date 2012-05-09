@@ -8,10 +8,11 @@ class EdlineItem
 		@id = id
 		@user = user
 		@type = "html"
-		@content = "<p>Well this is odd. I shouldn't be here.</p>"
+		@content = "<p>This app doesn't know how to handle this. Alec is looking into this and will probably fix it. Eventually.</p>"
 		@client = user.client
 		@cache = user.cache
 		@cache_file = ["items", @id, @user.username, "payload"]
+		@urls = [];
 
 		@fetched = false
 
@@ -45,10 +46,13 @@ class EdlineItem
 							 	   .headers["Location"])
 		end
 
+		@urls.push url
+
 		c = @client.get(url,
 						:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
 
 		while c.headers['Location'] != nil
+			@urls.push c.headers['Location']
 			c = @client.get(c.headers['Location'])
 		end
 
@@ -75,6 +79,16 @@ class EdlineItem
 		end
 
 		item_page = self.request_item
+
+		# some items are dumb and redirect to files
+		if item_page.headers['Location'] != nil
+			file = URI(item_page.headers["Location"]).path
+
+			@type = 'file'
+			@content = EdlineFile.fetch_file(@cache, file, @user)
+
+			return _data
+		end
 
 		dom = Nokogiri::HTML(item_page.content)
 
@@ -103,7 +117,7 @@ class EdlineItem
 
 		# check for a directory listing
 		dir = dom.at_css('#fsvItemsTable')
-		if dir != nil
+		if dir !=nil
 			@type = 'folder'
 			@content = []
 
@@ -123,6 +137,26 @@ class EdlineItem
 
 			return _data
 		end
+
+		# gen a temp file for invalid thingys
+		d = File.join("logs", "invalid_items", @id)
+		if !File.directory?(d)
+			FileUtils.mkdir_p(d, :mode => 0777)
+		end
+
+		File.open(File.join(d, "info") << ".json", 'w') { |f|
+			f.write({
+				"id" => @id,
+				"username" => @user.username,
+				"uri" => @urls
+			}.to_json())
+		}
+
+		File.open(File.join(d, "info") << ".html", 'w') { |f|
+			f.write(item_page.content)
+		}
+
+		$logger.warn "[ITEM] Unhandlable item: %s" % @id
 
 		{
 			'type' => @type,

@@ -1,0 +1,13 @@
+environment: development
+chdir: ./
+address: 127.0.0.1
+port: 4567
+servers: 1
+pid: ./thin/dev/tmp/thin.pid
+rackup: config.ru
+log: ./thin/dev/log/thin.log
+max_conns: 1024
+wait: 30
+timeout: 30
+max_persistent_conns: 512
+daemonize: false

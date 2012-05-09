@@ -82,8 +82,18 @@ class User
 			return Messages.error "Invalid Login";
 		end
 
+		$logger.info "[CLASS][ORIGINAL] %s" % location
+
 		# valid logins go to the school page. we better fetch that.
 		homepage = @client.get location
+		q = false
+		while homepage.headers["Location"] != nil
+			location = homepage.headers["Location"]
+			homepage = @client.get location
+			q = true
+		end
+
+		$logger.info "[CLASS][FINAL] %s" % location if q
 
 		# start parsing
 		dom = Nokogiri::HTML(homepage.content)
