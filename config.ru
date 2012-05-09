@@ -4,7 +4,8 @@ require 'logger'
 
 Dir.mkdir('logs') unless File.exist?('logs')
 
-$logger = Logger.new('logs/common.log','weekly')
+f = File.open('logs/common.log', File::APPEND)
+$logger = Logger.new(f)
 $logger.level = Logger::INFO
 
 # Spit stdout and stderr to a file during production
