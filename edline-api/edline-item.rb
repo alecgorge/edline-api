@@ -12,8 +12,9 @@ class EdlineItem
 		@client = user.client
 		@cache = user.cache
 		@cache_file = ["items", @id, @user.username, "payload"]
-		@urls = [];
-		@contents = [];
+		@urls = []
+		@contents = []
+		@headers = []
 
 		@fetched = false
 
@@ -52,6 +53,7 @@ class EdlineItem
 
 		@urls.push url
 		@contents.push c.content
+		@headers.push c.headers
 
 		while c.headers['Location'] != nil
 			@urls.push c.headers['Location']
@@ -59,6 +61,7 @@ class EdlineItem
 			c = @client.get(c.headers['Location'])
 
 			@contents.push c.content
+			@headers.push c.headers
 		end
 
 		return c
@@ -77,6 +80,7 @@ class EdlineItem
 
 		@urls = []
 		@contents = []
+		@headers = []
 
 		return p
 	end
@@ -156,7 +160,8 @@ class EdlineItem
 			f.write({
 				"id" => @id,
 				"username" => @user.username,
-				"uri" => @urls
+				"uri" => @urls,
+				"headers" => @headers
 			}.to_json())
 		}
 
@@ -170,6 +175,7 @@ class EdlineItem
 
 		@urls = []
 		@contents = []
+		@headers = []
 
 		{
 			'type' => @type,
