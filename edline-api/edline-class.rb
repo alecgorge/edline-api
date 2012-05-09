@@ -9,6 +9,7 @@ class EdlineClass
 		@cache = user.cache
 		@user = user
 		@client = user.client
+		@url = ""
 
 		@cache_name = ["classes", @id, "information"]
 
@@ -46,6 +47,8 @@ class EdlineClass
 							 	   .headers["Location"])
 		end
 
+		@url = url
+
 		# fetch this class page
 		@client.get(url,
 					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
@@ -75,71 +78,101 @@ class EdlineClass
 
 		dom = Nokogiri::HTML(class_page.content)
 
-		@class_name = dom.at_css('#edlHomePageDocBoxAreaTitleSpan').content.strip
+		begin # we may need to rescue
+			@class_name = dom.at_css('#edlHomePageDocBoxAreaTitleSpan').content.strip
 
-		@teacher = dom.at_css('#GroupMessageBoxContent b').content.strip
+			@teacher = dom.at_css('#GroupMessageBoxContent b').content.strip
 
-		# get calendar items
-		raw_cal = dom.css('#CalendarBoxContent tr')
+			# get calendar items
+			raw_cal = dom.css('#CalendarBoxContent tr')
 
-		raw_cal.each { |row|
-			dates = row.css('td.edlEventDateCell')
+			raw_cal.each { |row|
+				dates = row.css('td.edlEventDateCell')
 
-			# there are blank tr's because of reasons (???)
-			next if dates.length == 0
+				# there are blank tr's because of reasons (???)
+				next if dates.length == 0
 
-			date = dates[0].content.strip
+				date = dates[0].content.strip
 
-			date = Date.new(("20"+date[6, 2]).to_i, # year
-							date[0, 2].to_i,		# month
-							date[3,2].to_i)			# day
-					   .to_time
-					   .utc							# make sure everything is the same timezone
-					   .to_i
+				date = Date.new(("20"+date[6, 2]).to_i, # year
+								date[0, 2].to_i,		# month
+								date[3,2].to_i)			# day
+						   .to_time
+						   .utc							# make sure everything is the same timezone
+						   .to_i
 
-			link = row.css('td.edlEventContentCell a')[0]
+				link = row.css('td.edlEventContentCell a')[0]
 
-			isFile = link['href'][0..6] == '/files/'
+				isFile = link['href'][0..6] == '/files/'
 
-			title = link.content.strip
+				title = link.content.strip
 
-			id = isFile ? link['href'] : link['href'][76,19] # from pos 76 for 19 chars
+				id = isFile ? link['href'] : link['href'][76,19] # from pos 76 for 19 chars
 
-			@calendar.push({
-				'name' => title,
-				'isFile' => isFile,
-				'id' => id,
-				'date' => date
-			})
-		} unless raw_cal.length == 0
+				@calendar.push({
+					'name' => title,
+					'isFile' => isFile,
+					'id' => id,
+					'date' => date
+				})
+			} unless raw_cal.length == 0
 
-		# get contents
-		raw_contents = dom.css('#ContentsBoxContent div.edlBoxListItem a')
+			# get contents
+			raw_contents = dom.css('#ContentsBoxContent div.edlBoxListItem a')
 
-		raw_contents.each { |link|
-			isFile = link['href'][0..6] == '/files/'
+			raw_contents.each { |link|
+				isFile = link['href'][0..6] == '/files/'
 
-			title = link.content.strip
+				title = link.content.strip
 
-			id = isFile ? link['href'] : link['href'][22,19] # from pos 22 for 19 chars
+				id = isFile ? link['href'] : link['href'][22,19] # from pos 22 for 19 chars
 
-			@contents.push({
-				'name' => title,
-				'isFile' => isFile,
-				'id' => id
-			})
-		}
+				@contents.push({
+					'name' => title,
+					'isFile' => isFile,
+					'id' => id
+				})
+			}
 
-		@data = {
-			'teacher' => @teacher,
-			'class_name' => @class_name,
-			'contents' => @contents,
-			'calendar' => @calendar
-		}
+			@data = {
+				'teacher' => @teacher,
+				'class_name' => @class_name,
+				'contents' => @contents,
+				'calendar' => @calendar
+			}
 
-		self.save_json
-		@extracted = true
+			self.save_json
+			@extracted = true
 
-		return @data
+			return @data
+		rescue
+			# gen a temp file for invalid classes
+			d = File.join("logs", "invalid_classes", @id)
+			if !File.directory?(d)
+				FileUtils.mkdir_p(d, :mode => 0777)
+			end
+
+			File.open(File.join(d, "info") << ".json", 'w') { |f|
+				f.write({
+					"id" => @id,
+					"username" => @user.username,
+					"uri" => @url,
+					"headers" => class_page.headers
+				}.to_json())
+			}
+
+			File.open(File.join(d, "info") << ".html", 'w') { |f|
+				f.write(class_page.content)
+			}
+
+			$logger.warn "[CLASS] Unhandlable class: %s" % @id
+
+			return {
+				'teacher' => 'Alec will look into this',
+				'class_name' => 'Error fetching class',
+				'contents' => [],
+				'calendar' => []
+			}
+		end
 	end
 end
