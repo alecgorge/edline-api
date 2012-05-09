@@ -4,7 +4,7 @@ require 'logger'
 
 Dir.mkdir('logs') unless File.exist?('logs')
 
-f = File.open('logs/common.log', File::APPEND)
+f = File.open('logs/common.log', "a+")
 $logger = Logger.new(f)
 $logger.level = Logger::INFO
 
