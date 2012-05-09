@@ -36,7 +36,12 @@ class EdlineItem
 
 		# let's see if we already have the path to class cached
 		cache_name = ["items", @id, "url"]
+
+		@urls.push cache_name
+
 		url = @cache.get(cache_name, nil, Cache::ITEM_URL_DURATION)
+		
+		@urls.push url
 
 		if url == nil
 			# unfortunately, cache miss so we have to make a POST and follow the redirect
