@@ -13,6 +13,7 @@ class EdlineItem
 		@cache = user.cache
 		@cache_file = ["items", @id, @user.username, "payload"]
 		@urls = [];
+		@contents = [];
 
 		@fetched = false
 
@@ -36,12 +37,7 @@ class EdlineItem
 
 		# let's see if we already have the path to class cached
 		cache_name = ["items", @id, "url"]
-
-		@urls.push cache_name
-
 		url = @cache.get(cache_name, nil, Cache::ITEM_URL_DURATION)
-		
-		@urls.push url
 
 		if url == nil
 			# unfortunately, cache miss so we have to make a POST and follow the redirect
@@ -51,14 +47,18 @@ class EdlineItem
 							 	   .headers["Location"])
 		end
 
-		@urls.push url
-
 		c = @client.get(url,
 						:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
 
+		@urls.push url
+		@contents.push c.content
+
 		while c.headers['Location'] != nil
 			@urls.push c.headers['Location']
+
 			c = @client.get(c.headers['Location'])
+
+			@contents.push c.content
 		end
 
 		return c
@@ -74,6 +74,9 @@ class EdlineItem
 			@cache.set(@cache_file, p)
 			@fetched = true
 		end
+
+		@urls = []
+		@contents = []
 
 		return p
 	end
@@ -157,11 +160,16 @@ class EdlineItem
 			}.to_json())
 		}
 
-		File.open(File.join(d, "info") << ".html", 'w') { |f|
-			f.write(item_page.content)
+		@contents.each_with_index { |v,k|
+			File.open(File.join(d, "info") << "_" << k.to_s << ".html", 'w') { |f|
+				f.write(v)
+			}
 		}
 
 		$logger.warn "[ITEM] Unhandlable item: %s" % @id
+
+		@urls = []
+		@contents = []
 
 		{
 			'type' => @type,
