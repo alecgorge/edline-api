@@ -8,7 +8,10 @@ class EdlineItem
 		@id = id
 		@user = user
 		@type = "html"
-		@content = "<p>This app doesn't know how to handle this. Alec is looking into this and will probably fix it. Eventually.</p>"
+		@content = {
+			'title' => "Uh oh",
+			'content' => "<p>This app doesn't know how to handle this. Alec is looking into this and will probably fix it. Eventually.</p>"
+		}
 		@client = user.client
 		@cache = user.cache
 		@cache_file = ["items", @id, @user.username, "payload"]
