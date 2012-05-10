@@ -62,7 +62,7 @@ class User
 		child_classes.each_with_index { |cl, k|
 			if  cl['title'] == 'More Classes...' ||
 				cl['title'] == '-'
-				r_val = k
+				r_val = k - 1
 				break
 			end
 		}
