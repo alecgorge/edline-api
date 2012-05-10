@@ -156,7 +156,7 @@ class User
 			}
 
 			$logger.warn "[PRIVATE] Unhandlable user: %s" % @username
-
+ 
 			return {
 				@username => [{
 					'teacher' => 'Alec will look into this',
@@ -191,6 +191,15 @@ class User
 
 			begin
 				dom = Nokogiri::HTML(page.content)
+
+				if dom.at_css('title').content.strip == 'Please note:'
+					return [{
+						'date' => Date.new.to_time.utc.to_i,
+						'item_id' => '-1',
+						'class' => 'No private reports',
+						'name' => 'School denied permission'
+					}]
+				end
 
 				cached_data = []
 
