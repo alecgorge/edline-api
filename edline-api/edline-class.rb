@@ -130,7 +130,7 @@ class EdlineClass
 
 				title = link.content.strip
 
-				id = isFile ? link['href'] : link['href'][22,19] # from pos 22 for 19 chars
+				id = isFile ? link['href'] : Fields.find_id(link['href'])
 
 				@contents.push({
 					'name' => title,

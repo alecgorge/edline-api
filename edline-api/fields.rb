@@ -47,4 +47,26 @@ class Fields
 					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'},
 					:follow_redirect => false)
 	end
+
+	def self.rlViewItm(client, id)
+		client.post('https://www.edline.net/post/UserDocList.page',
+					:body => {
+						'targetResEntid' => id,
+						'resourceViewEvent' => '1'
+					},
+					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'},
+					:follow_redirect => false)
+	end
+
+	def self.find_id(str)
+		m = str.match(/mcViewItm\('([0-9]+)'/)
+
+		if m == nil
+			m = str.match(/rlViewItm\('([0-9]+)'/)[1]
+			return "r," << m
+		else
+			m = m[1]
+			return m
+		end
+	end
 end

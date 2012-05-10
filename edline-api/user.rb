@@ -95,45 +95,75 @@ class User
 
 		$logger.info "[CLASS][FINAL] %s" % location if q
 
-		# start parsing
-		dom = Nokogiri::HTML(homepage.content)
+		begin
+			# start parsing
+			dom = Nokogiri::HTML(homepage.content)
 
-		# looking in the header menu because it is the only place where all the necessary
-		# content exists
-		shortcuts = dom.at_css '#myShortcutsItem'
+			# looking in the header menu because it is the only place where all the necessary
+			# content exists
+			shortcuts = dom.at_css '#myShortcutsItem'
 
-		all_people = shortcuts.css('div[type=menu]')
+			all_people = shortcuts.css('div[type=menu]')
 
-		# holds all the student information
-		students = {}
+			# holds all the student information
+			students = {}
 
-		# detect if parent
-		if all_people[0] != nil && all_people[0]['id'].index('userShortcuts') != nil
-			# remove the parent, they don't have classes
-			all_people.shift
+			# detect if parent
+			if all_people[0] != nil && all_people[0]['id'].index('userShortcuts') != nil
+				# remove the parent, they don't have classes
+				all_people.shift
 
-			all_people.each { |child|
-				child_classes = child.children.css('div[type=item]')
+				all_people.each { |child|
+					child_classes = child.children.css('div[type=item]')
+
+					separator_position = child_classes.index(child_classes.css('#Separator1')[0]) - 1
+
+					students[child['title']] = child_classes[0..separator_position]
+				}
+			else
+				# get the name
+				name = dom.at_css('#userShortcuts0 a').content
+
+				child_classes = shortcuts.css('div[type=item]')
 
 				separator_position = child_classes.index(child_classes.css('#Separator1')[0]) - 1
 
-				students[child['title']] = child_classes[0..separator_position]
+				students[name] = child_classes[0..separator_position]
+			end
+
+			students.each do |name, student| # student is a NodeSet
+				# get all the Edline IDs for the classes
+				students[name] = student.map { |node|
+					Fields.find_id(node.attr('action'))
+				}
+			end
+		rescue
+			# gen a temp file for invalid classes
+			d = File.join("logs", "invalid_users", @username)
+			if !File.directory?(d)
+				FileUtils.mkdir_p(d, :mode => 0777)
+			end
+
+			File.open(File.join(d, "info") << ".json", 'w') { |f|
+				f.write({
+					"username" => @username,
+					"headers" => page.headers
+				}.to_json())
 			}
-		else
-			# get the name
-			name = dom.at_css('#userShortcuts0 a').content
 
-			child_classes = shortcuts.css('div[type=item]')
+			File.open(File.join(d, "info") << ".html", 'w') { |f|
+				f.write(page.content)
+			}
 
-			separator_position = child_classes.index(child_classes.css('#Separator1')[0]) - 1
+			$logger.warn "[PRIVATE] Unhandlable user: %s" % @username
 
-			students[name] = child_classes[0..separator_position]
-		end
-
-		students.each do |name, student| # student is a NodeSet
-			# get all the Edline IDs for the classes
-			students[name] = student.map { |node|
-				node.attr('action').match(/code:mcViewItm\('([0-9]+)'/)[1]
+			return {
+				@username => [{
+					'teacher' => 'Alec will look into this',
+					'class_name' => 'Error fetching classes',
+					'contents' => [],
+					'calendar' => []
+				}]
 			}
 		end
 
@@ -184,7 +214,7 @@ class User
 
 					cached_data.push({
 						'date' => date,
-						'item_id' => tds[3].at_css('a')['href'].match(/code:mcViewItm\('([0-9]+)'/)[1],
+						'item_id' => Fields.find_id(tds[3].at_css('a')['href']),
 						'class' => tds[4].at_css('a').content.strip,
 						'name' => name
 					})
