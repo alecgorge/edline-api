@@ -123,7 +123,7 @@ class EdlineClass
 			} unless raw_cal.length == 0
 
 			# get contents
-			raw_contents = dom.css('#ContentsBoxContent div.edlBoxListItem a')
+			raw_contents = dom.css('#ContentsBoxContent div.edlBoxListItem a[id^=contents]')
 
 			raw_contents.each { |link|
 				isFile = link['href'][0..6] == '/files/'

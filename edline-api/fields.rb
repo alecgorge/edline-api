@@ -86,7 +86,7 @@ class Fields
 
 		# javascript:submitEvent('docView', 'TCNK=calendarBoxComponent;targetDocEntid=573652239356711700')
 		m = str.match(/targetDocEntid=([0-9]+)/)
-		return "d," << m[1] unless m == nil
+		return "d," << m[1] unless m == nil		
 
 		raise "Unable to grok dis id: %s" % str
 	end
