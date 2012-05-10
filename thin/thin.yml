@@ -4,7 +4,7 @@ address: 127.0.0.1
 user: nginx
 group: nginx
 port: 5000
-servers: 1
+servers: 2
 pid: ./thin/tmp/thin.pid
 rackup: config.ru
 log: ./thin/log/thin.log
