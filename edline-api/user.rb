@@ -56,6 +56,19 @@ class User
 		return s
 	end
 
+	def _find_end_pos(child_classes)
+		end_pos = 0
+
+		child_classes.each_with_index { |cl, k|
+			if  c['title'] == 'More Classes...' ||
+				c['title'] == '-'
+				end_pos = k
+			end
+		}
+
+		end_pos
+	end
+
 	def data
 		# check if there is a cache of the classes list
 		h = Digest::SHA2.new << @username << ":::" << @password
@@ -116,10 +129,7 @@ class User
 
 				all_people.each { |child|
 					child_classes = child.children.css('div[type=item]')
-
-					separator_position = child_classes.index(child_classes.css('#Separator1')[0]) - 1
-
-					students[child['title']] = child_classes[0..separator_position]
+					students[child['title']] = child_classes[0.._find_end_pos(child_classes)]
 				}
 			else
 				# get the name
@@ -127,9 +137,7 @@ class User
 
 				child_classes = shortcuts.css('div[type=item]')
 
-				separator_position = child_classes.index(child_classes.css('#Separator1')[0]) - 1
-
-				students[name] = child_classes[0..separator_position]
+				students[name] = child_classes[0.._find_end_pos(child_classes)]
 			end
 
 			students.each do |name, student| # student is a NodeSet
