@@ -5,13 +5,6 @@ require 'date'
 
 class EdlineItem
 	def initialize(id, user)
-		if id.index(',') != nil
-			id = id[2..-1]
-			@rlViewItm = true
-		else
-			@rlViewItm = false
-		end
-
 		@id = id
 		@user = user
 		@type = "html"
@@ -50,16 +43,9 @@ class EdlineItem
 		if url == nil
 			# unfortunately, cache miss so we have to make a POST and follow the redirect
 			# also we will save it for later
-
-			if @rlViewItm
-				url = @cache.set(cache_name,
-								 Fields.rlViewItm(@client, @id)
-								 	   .headers["Location"])
-			else
-				url = @cache.set(cache_name,
-								 Fields.submit_event(@client, Fields.item_fields(@id))
-								 	   .headers["Location"])
-			end
+			url = @cache.set(cache_name,
+							 Fields.smart_submit_event(@client, @id)
+							 	   .headers["Location"])
 		end
 
 		c = @client.get(url,
