@@ -59,7 +59,7 @@ class Fields
 	end
 
 	def self.find_id(str)
-		m = str.match(/mcViewItm\('([0-9]+)'/)
+		m = str.match(/(?:mc|cb)ViewItm\('([0-9]+)'/)
 
 		if m == nil
 			m = str.match(/rlViewItm\('([0-9]+)'/)[1]

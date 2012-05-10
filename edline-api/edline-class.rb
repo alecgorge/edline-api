@@ -112,7 +112,7 @@ class EdlineClass
 
 				title = link.content.strip
 
-				id = isFile ? link['href'] : link['href'][76,19] # from pos 76 for 19 chars
+				id = isFile ? link['href'] : Fields.find_id(link['href'])
 
 				@calendar.push({
 					'name' => title,
