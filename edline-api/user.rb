@@ -57,14 +57,17 @@ class User
 	end
 
 	def _find_end_pos(child_classes)
+		r_val = child_classes.length - 1
+
 		child_classes.each_with_index { |cl, k|
 			if  cl['title'] == 'More Classes...' ||
 				cl['title'] == '-'
-				return k
+				r_val = k
+				break
 			end
 		}
 
-		return child_classes.length - 1
+		return r_val
 	end
 
 	def data
