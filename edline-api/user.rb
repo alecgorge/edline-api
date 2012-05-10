@@ -159,35 +159,63 @@ class User
 				page = @client.get(page.headers['Location'])
 			end
 
-			dom = Nokogiri::HTML(page.content)
+			begin
+				dom = Nokogiri::HTML(page.content)
 
-			cached_data = []
+				cached_data = []
 
-			dom.css('.ed-formTable tr')[2..-1].each { |row|
-				tds = row.css('td')
-				name = tds[5].content.strip
+				dom.css('.ed-formTable tr')[2..-1].each { |row|
+					tds = row.css('td')
+					name = tds[5].content.strip
 
-				if ['Demographics',
-					'Line Schedules',
-					'Grid Schedules'].include? name
-					next
+					if ['Demographics',
+						'Line Schedules',
+						'Grid Schedules'].include? name
+						next
+					end
+
+					date = tds[2].content.strip
+					date = Date.new(("20"+date[6, 2]).to_i, # year
+								date[0, 2].to_i,			# month
+								date[3,2].to_i)				# day
+						   .to_time
+						   .utc								# make sure everything is the same timezone
+						   .to_i
+
+					cached_data.push({
+						'date' => date,
+						'item_id' => tds[3].at_css('a')['href'].match(/code:mcViewItm\('([0-9]+)'/)[1],
+						'class' => tds[4].at_css('a').content.strip,
+						'name' => name
+					})
+				}
+			rescue
+				# gen a temp file for invalid classes
+				d = File.join("logs", "invalid_private_reports", @id)
+				if !File.directory?(d)
+					FileUtils.mkdir_p(d, :mode => 0777)
 				end
 
-				date = tds[2].content.strip
-				date = Date.new(("20"+date[6, 2]).to_i, # year
-							date[0, 2].to_i,			# month
-							date[3,2].to_i)				# day
-					   .to_time
-					   .utc								# make sure everything is the same timezone
-					   .to_i
+				File.open(File.join(d, "info") << ".json", 'w') { |f|
+					f.write({
+						"username" => @username,
+						"headers" => page.headers
+					}.to_json())
+				}
 
-				cached_data.push({
-					'date' => date,
-					'item_id' => tds[3].at_css('a')['href'].match(/code:mcViewItm\('([0-9]+)'/)[1],
-					'class' => tds[4].at_css('a').content.strip,
-					'name' => name
-				})
-			}
+				File.open(File.join(d, "info") << ".html", 'w') { |f|
+					f.write(page.content)
+				}
+
+				$logger.warn "[PRIVATE] Unhandlable private reports: %s" % @username
+
+				return [{
+					'date' => Date.new.to_time.utc.to_i,
+					'item_id' => '-1',
+					'class' => 'None available.',
+					'name' => 'Alec is fixing this. Try later.'
+				}]
+			end
 		end
 
 		@cache.set(['private_reports', @username], cached_data)
