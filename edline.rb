@@ -43,7 +43,7 @@ before_only(['/user', '/user2', '/item', '/file', '/private-reports']) do
 		@password = params['p']
 	end
 
-	content_type :json
+	content_type 'application/json' # charset breaks android
 end
 
 post '/user' do
