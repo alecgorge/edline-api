@@ -56,7 +56,7 @@ class Fields
 		self.submit_event(client, {
 			'targetResEntid' => id,
 			'resourceViewEvent' => '1'
-		}, 'https://www.edline.net/post/UserDocList.page')
+		}, 'https://www.edline.net/post/ResourceList.page')
 	end
 
 	def self.smart_submit_event(client, id)
