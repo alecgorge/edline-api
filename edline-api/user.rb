@@ -57,7 +57,7 @@ class User
 	end
 
 	def _find_end_pos(child_classes)
-		end_pos = 0
+		end_pos = child_classes.length - 1
 
 		child_classes.each_with_index { |cl, k|
 			if  c['title'] == 'More Classes...' ||
