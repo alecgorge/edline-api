@@ -191,7 +191,7 @@ class User
 				}
 			rescue
 				# gen a temp file for invalid classes
-				d = File.join("logs", "invalid_private_reports", @id)
+				d = File.join("logs", "invalid_private_reports", @username)
 				if !File.directory?(d)
 					FileUtils.mkdir_p(d, :mode => 0777)
 				end
