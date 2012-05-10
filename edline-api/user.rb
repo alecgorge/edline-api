@@ -183,7 +183,7 @@ class User
 
 				cached_data.push({
 					'date' => date,
-					'item_id' => tds[3].at_css('a')['href'][22..-4],
+					'item_id' => tds[3].at_css('a')['href'].match(/code:mcViewItm\('([0-9]+)'/)[1],
 					'class' => tds[4].at_css('a').content.strip,
 					'name' => name
 				})

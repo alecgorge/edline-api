@@ -79,7 +79,7 @@ class EdlineClass
 		dom = Nokogiri::HTML(class_page.content)
 
 		begin # we may need to rescue
-			@class_name = dom.at_css('#edlHomePageDocBoxAreaTitleSpan').content.strip
+			@class_name = dom.at_css('title').content.strip[0..-11] # strip off " Home Page"
 
 			@teacher = dom.at_css('#GroupMessageBoxContent b')
 			if @teacher != nil 

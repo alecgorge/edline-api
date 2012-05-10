@@ -138,7 +138,7 @@ class EdlineItem
 				title = link.content.strip
 				id = isFile ?
 						link['href'] :
-						link['href'][22,19] # from pos 22 for 19 chars
+						link['href'].match(/code:mcViewItm\('([0-9]+)'/)[1]
 
 				@content.push({
 					'name' => title,
