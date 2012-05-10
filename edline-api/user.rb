@@ -58,8 +58,8 @@ class User
 
 	def _find_end_pos(child_classes)
 		child_classes.each_with_index { |cl, k|
-			if  c['title'] == 'More Classes...' ||
-				c['title'] == '-'
+			if  cl['title'] == 'More Classes...' ||
+				cl['title'] == '-'
 				return k
 			end
 		}
