@@ -86,6 +86,7 @@ class User
 
 		# valid logins go to the school page. we better fetch that.
 		homepage = @client.get location
+		
 		q = false
 		while homepage.headers["Location"] != nil
 			location = homepage.headers["Location"]
@@ -147,12 +148,12 @@ class User
 			File.open(File.join(d, "info") << ".json", 'w') { |f|
 				f.write({
 					"username" => @username,
-					"headers" => page.headers
+					"headers" => homepage.headers
 				}.to_json())
 			}
 
 			File.open(File.join(d, "info") << ".html", 'w') { |f|
-				f.write(page.content)
+				f.write(homepage.content)
 			}
 
 			$logger.warn "[PRIVATE] Unhandlable user: %s" % @username
