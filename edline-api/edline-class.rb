@@ -150,7 +150,7 @@ class EdlineClass
 			@extracted = true
 
 			return @data
-		rescue
+		rescue => e
 			# gen a temp file for invalid classes
 			d = File.join("logs", "invalid_classes", @id)
 			if !File.directory?(d)
@@ -162,7 +162,9 @@ class EdlineClass
 					"id" => @id,
 					"username" => @user.username,
 					"uri" => @url,
-					"headers" => class_page.headers
+					"headers" => class_page.headers,
+					"message" => e.message,
+					"backtrace" => e.backtrace[0..9]
 				}.to_json())
 			}
 

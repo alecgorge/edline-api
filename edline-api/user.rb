@@ -144,7 +144,7 @@ class User
 					Fields.find_id(node.attr('action'))
 				}
 			end
-		rescue
+		rescue => e
 			# gen a temp file for invalid classes
 			d = File.join("logs", "invalid_users", @username)
 			if !File.directory?(d)
@@ -154,7 +154,9 @@ class User
 			File.open(File.join(d, "info") << ".json", 'w') { |f|
 				f.write({
 					"username" => @username,
-					"headers" => homepage.headers
+					"headers" => homepage.headers,
+					"message" => e.message,
+					"backtrace" => e.backtrace[0..9]
 				}.to_json())
 			}
 
@@ -235,7 +237,7 @@ class User
 						'name' => name
 					})
 				}
-			rescue
+			rescue => e
 				# gen a temp file for invalid classes
 				d = File.join("logs", "invalid_private_reports", @username)
 				if !File.directory?(d)
@@ -245,7 +247,9 @@ class User
 				File.open(File.join(d, "info") << ".json", 'w') { |f|
 					f.write({
 						"username" => @username,
-						"headers" => page.headers
+						"headers" => page.headers,
+						"message" => e.message,
+						"backtrace" => e.backtrace[0..9]
 					}.to_json())
 				}
 
