@@ -47,7 +47,8 @@ class EdlineItem
 			# unfortunately, cache miss so we have to make a POST and follow the redirect
 			# also we will save it for later
 			url = @cache.set(cache_name,
-							 Fields.smart_submit_event(@client, @id).headers["Location"])
+							 Fields.smart_submit_event(@client, @id)
+							 	   .headers["Location"])
 		end
 
 		c = @client.get(url,
