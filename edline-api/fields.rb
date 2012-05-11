@@ -70,7 +70,7 @@ class Fields
 	end
 
 	def self.find_id(str)
-		m = str.match(/(?:mc|cb)ViewItm\('([0-9]+)'/)
+		m = str.match(/(?:mc|cb|fsv)ViewItm\('([0-9]+)'/)
 		return m[1] unless m == nil
 
 		m = str.match(/rlViewItm\('([0-9]+)'/)
@@ -78,7 +78,9 @@ class Fields
 
 		# javascript:submitEvent('docView', 'TCNK=calendarBoxComponent;targetDocEntid=573652239356711700')
 		m = str.match(/targetDocEntid=([0-9]+)/)
-		return "d," << m[1] unless m == nil		
+		return "d," << m[1] unless m == nil
+			
+		end
 
 		raise "Unable to grok dis id: %s" % str
 	end
