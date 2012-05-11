@@ -53,10 +53,7 @@ class Fields
 	end
 
 	def self.rlViewItm(client, id)
-		self.submit_event(client, {
-			'targetResEntid' => id,
-			'resourceViewEvent' => '1'
-		}, 'https://www.edline.net/post/UserDocList.page')
+		self.submit_event(client, self.doc_fields(id))
 	end
 
 	def self.smart_submit_event(client, id)
@@ -66,15 +63,10 @@ class Fields
 			id = id[2..-1]
 		end
 
-		if type != false
-			if type == "r"
-				return self.rlViewItm(client, id)
-			elsif type == "d"
-				return self.submit_event(client, self.doc_fields(id))
-			end
-		else
-			return self.submit_event(client, self.item_fields(id))
-		end
+		return self.rlViewItm(client, id) if type == "r"
+		return self.submit_event(client, self.doc_fields(id)) if type == "d"
+		
+		return self.submit_event(client, self.item_fields(id))
 	end
 
 	def self.find_id(str)

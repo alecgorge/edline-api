@@ -1,2 +1,18 @@
 >> Waiting for 1 connection(s) to finish, can take up to 30 sec, CTRL+C to stop now
 >> Exiting!
+>> Thin web server (v1.3.1 codename Triple Espresso)
+>> Maximum connections set to 1024
+>> Listening on 127.0.0.1:4567, CTRL+C to stop
+{"Date"=>"Fri, 11 May 2012 00:13:51 GMT", "Location"=>"https://www.edline.net/error.html?refid=9fbc5b133-0191351&requrl=http%3A%2F%2Fwww.edline.net%2Fpost%2FUserDocList.page", "Content-Type"=>"text/html; charset=ISO-8859-1", "Content-Length"=>"0", "Cache-Control"=>"max-age=0, no-store", "Expires"=>"Sun, 13 May 2012 00:13:51 GMT", "Vary"=>"Accept-Encoding"}
+>> Exiting!
+>> Thin web server (v1.3.1 codename Triple Espresso)
+>> Maximum connections set to 1024
+>> Listening on 127.0.0.1:4567, CTRL+C to stop
+3406979280556049796
+{"Date"=>"Fri, 11 May 2012 00:18:44 GMT", "Location"=>"https://www.edline.net/error.html?refid=d079aa013-0191844&requrl=http%3A%2F%2Fwww.edline.net%2Fpost%2FUserDocList.page", "Content-Type"=>"text/html; charset=ISO-8859-1", "Content-Length"=>"0", "Cache-Control"=>"max-age=0, no-store", "Expires"=>"Sun, 13 May 2012 00:18:44 GMT", "Vary"=>"Accept-Encoding"}
+>> Exiting!
+>> Thin web server (v1.3.1 codename Triple Espresso)
+>> Maximum connections set to 1024
+>> Listening on 127.0.0.1:4567, CTRL+C to stop
+3406979280556049796
+{"Date"=>"Fri, 11 May 2012 00:21:03 GMT", "Location"=>"https://www.edline.net/DocView.page", "Content-Type"=>"text/html; charset=ISO-8859-1", "Content-Length"=>"0", "Cache-Control"=>"max-age=0, no-store", "Expires"=>"Sun, 13 May 2012 00:21:03 GMT", "Vary"=>"Accept-Encoding"}
