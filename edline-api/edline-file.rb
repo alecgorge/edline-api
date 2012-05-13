@@ -19,6 +19,9 @@ class EdlineFile
 			end
 
 			file = user.client.get('https://www.edline.net' + file)
+			while file.headers['Location'] != nil
+				file = user.client.get file.headers['Location']
+			end
 
 			File.open(q, "w+") { |f|
 				f.write(file.content)
