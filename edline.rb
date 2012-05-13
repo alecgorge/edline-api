@@ -71,7 +71,7 @@ end
 
 post '/file' do
 	if params.has_key?("file")
-		return Messages.success(EdlineFile.fetch_file(cache, params['file'])).to_json
+		return Messages.success(EdlineFile.fetch_file(cache, params['file'], User.new(@username, @password, cache))).to_json
 	end
 end
 
