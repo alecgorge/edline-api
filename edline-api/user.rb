@@ -3,6 +3,7 @@ require './edline-api/fields'
 require 'httpclient'
 require 'sinatra/reloader'
 require 'nokogiri'
+require './edline-api/messages'
 require './edline-api/edline-class'
 require 'digest/sha2'
 
@@ -80,7 +81,7 @@ class User
 		if cached != nil
 			students = cached
 
-			return fetch_students(students)
+			return Messages.success(fetch_students(students))
 		end
 
 		# we need to load the homepage to make sure the cookies are behaving correctly
@@ -169,19 +170,19 @@ class User
 
 			$logger.warn "[PRIVATE] Unhandlable user: %s" % @username
  
-			return {
+			return Messages.success({
 				@username => [{
 					'teacher' => 'Alec will look into this',
 					'class_name' => 'Error fetching classes',
 					'contents' => [],
 					'calendar' => []
 				}]
-			}
+			})
 		end
 
 		@cache.set(cache_name, students)
 
-		return fetch_students(students)
+		return Messages.success(fetch_students(students))
 	end
 
 	def private_reports

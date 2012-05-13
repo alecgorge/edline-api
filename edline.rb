@@ -53,7 +53,7 @@ end
 post '/user2' do
 	user = User.new(@username, @password, cache)
 
-	Messages.success(user.data).to_json
+	user.data.to_json
 end
 
 post '/item' do
