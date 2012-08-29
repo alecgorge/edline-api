@@ -45,9 +45,10 @@ class Cache
 	end
 
 	def key(*name)
-		p = name.join("/")
-		p = Digest::MD5.new << p
-		p.to_s
+		p = name.join(".")
+		#p = Digest::MD5.new << p
+		#p.to_s
+		p
 	end
 
 	def get(name, default = nil, length = @duration)

@@ -2,6 +2,7 @@
 require './edline-api/fields'
 require 'nokogiri'
 require 'date'
+require 'uri'
 
 class EdlineItem
 	def initialize(id, user)
@@ -89,6 +90,13 @@ class EdlineItem
 	end
 
 	def fetch_data
+		if @id[0..1] == "u,"
+			return {
+				'type' => 'url',
+				'content' => @id[1..-1]
+			}
+		end
+
 		if @fetched
 			return _data
 		end

@@ -80,6 +80,9 @@ class Fields
 		m = str.match(/targetDocEntid=([0-9]+)/)
 		return "d," << m[1] unless m == nil
 
+		# match direct links to things
+		return "u," << str unless (str ~= URI::regexp).nil?
+
 		raise "Unable to grok dis id: %s" % str
 	end
 end
