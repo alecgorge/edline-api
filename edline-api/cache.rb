@@ -1,6 +1,8 @@
 
 require 'json'
 require 'digest/md5'
+require 'rubygems'
+require 'couchbase'
 
 class Cache
 	USER_DURATION 		= 60 * 60 * 24 * 7 * 2 	# 2 weeks
@@ -15,8 +17,12 @@ class Cache
 	def initialize(cache_dir, length)
 		@cache_dir = cache_dir
 		@duration = length
+
+		@client = Couchbase.new "http://alecgorge.com:8091/pools/default/buckets/edline"
+		@client.quiet = true
 	end
 
+	# kept for bc only
 	def path(*name)
 		p = File.join(@cache_dir, *name) + ".txt"
 
@@ -38,41 +44,29 @@ class Cache
 		p
 	end
 
+	def key(*name)
+		p = name.join("/")
+		p = Digest::MD5.new << p
+		p.to_s
+	end
+
 	def get(name, default = nil, length = @duration)
 		name = [name] unless name.kind_of? Array
 
-		f = self.path(*name)
-		d = File.dirname(f)
+		return default if not SHOULD_CACHE
 
-		if !SHOULD_CACHE || !File.exists?(f)
-			return default
-		end
+		v = @client.get self.key(*name)
 
-		if (Time.now - File.mtime(f)).to_i < length
-			File.open(f, 'r') { |file|
-				default = JSON.parse(file.read)["payload"]
-			}
-		else
-			File.unlink(f)
-		end
-
+		return v unless v == nil
 		return default
 	end
 
-	def set(name, value)
+	def set(name, value, length = @duration)
 		name = [name] unless name.kind_of? Array
-
-		f = self.path(*name)
-		d = File.dirname(f)
 		
-		if !File.directory?(d)
-			FileUtils.mkdir_p(d, :mode => 0777)
-		end
+		v = @client.set(self.key(*name), value, :ttl => length)
 
-		File.open(f, "w+") { |file|
-			file.write({"payload" => value}.to_json)
-		}
-
-		return value
+		return v unless v == nil
+		return default
 	end
 end

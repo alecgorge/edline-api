@@ -76,7 +76,7 @@ class User
 		h = Digest::SHA2.new << @username << ":::" << @password
 
 		cache_name = ["users", h.to_s, "classes"]
-		cached = @cache.get(cache_name, nil, Cache::USER_DURATION)
+		cached = @cache.get(cache_name, nil)
 
 		if cached != nil
 			students = cached
@@ -99,6 +99,11 @@ class User
 
 		$logger.info "[CLASS][ORIGINAL] %s" % location
 
+		# new tactic. go striaght to brebeuf. it should format things correctly
+		homepage = @client.get "https://www.edline.net/pages/Brebeuf"
+
+=begin
+		# old tactic
 		# valid logins go to the school page. we better fetch that.
 		homepage = @client.get location
 		
@@ -110,7 +115,7 @@ class User
 		end
 
 		$logger.info "[CLASS][FINAL] %s" % location if q
-
+=end
 		begin
 			# start parsing
 			dom = Nokogiri::HTML(homepage.content)
@@ -118,6 +123,14 @@ class User
 			# looking in the header menu because it is the only place where all the necessary
 			# content exists
 			shortcuts = dom.at_css '#myShortcutsItem'
+
+=begin
+			# for some reason some people are boot direclty to the manage account screen.
+			# no longer.
+			if shortcuts == nil and dom.at_css('title').content == 'Manage Account'
+				dom = Nokogiri::HTML(@client.get('https://www.edline.net/pages/Brebeuf'))
+			end
+=end
 
 			all_people = shortcuts.css('div[type=menu]')
 
@@ -180,13 +193,13 @@ class User
 			})
 		end
 
-		@cache.set(cache_name, students)
+		@cache.set(cache_name, students, Cache::USER_DURATION)
 
 		return Messages.success(fetch_students(students))
 	end
 
 	def private_reports
-		cached_data = @cache.get(['private_reports', @username], nil, Cache::REPORT_DURATION)
+		cached_data = @cache.get(['private_reports', @username], nil)
 
 		if cached_data == nil
 			if !isPrimed
@@ -272,7 +285,7 @@ class User
 			end
 		end
 
-		@cache.set(['private_reports', @username], cached_data)
+		@cache.set(['private_reports', @username], cached_data, Cache::REPORT_DURATION)
 
 		cached_data
 	end

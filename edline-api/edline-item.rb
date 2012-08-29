@@ -21,7 +21,7 @@ class EdlineItem
 
 		@fetched = false
 
-		p = @cache.get(@cache_file, nil, Cache::ITEM_DURATION)
+		p = @cache.get(@cache_file, nil)
 
 		if p != nil
 			@fetched = true
@@ -41,13 +41,14 @@ class EdlineItem
 
 		# let's see if we already have the path to class cached
 		cache_name = ["items", @id, "url"]
-		url = @cache.get(cache_name, nil, Cache::ITEM_URL_DURATION)
+		url = @cache.get(cache_name, nil)
 
 		if url == nil
 			# unfortunately, cache miss so we have to make a POST and follow the redirect
 			# also we will save it for later
 			url = @cache.set(cache_name,
-							 Fields.smart_submit_event(@client, @id).headers["Location"])
+							 Fields.smart_submit_event(@client, @id).headers["Location"],
+							 Cache::ITEM_URL_DURATION)
 		end
 
 		c = @client.get(url,
@@ -76,7 +77,7 @@ class EdlineItem
 		}
 
 		if !@fetched
-			@cache.set(@cache_file, p)
+			@cache.set(@cache_file, p, Cache::ITEM_DURATION)
 			@fetched = true
 		end
 

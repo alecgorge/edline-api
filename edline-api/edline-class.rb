@@ -13,7 +13,7 @@ class EdlineClass
 
 		@cache_name = ["classes", @id, "information"]
 
-		@data = @cache.get(@cache_name, nil,  Cache::CLASS_DURATION)
+		@data = @cache.get(@cache_name, nil)
 
 		self.extract_json
 
@@ -37,14 +37,15 @@ class EdlineClass
 
 		# let's see if we already have the path to class cached
 		cache_name = ["classes", @id, "url"]
-		url = @cache.get(cache_name, nil, Cache::CLASS_URL_DURATION)
+		url = @cache.get(cache_name, nil)
 
 		if url == nil
 			# unfortunately, cache miss so we have to make a POST and follow the redirect
 			# also we will save it for later
 			url = @cache.set(cache_name,
 							 Fields.submit_event(@client, Fields.class_fields(@id))
-							 	   .headers["Location"])
+							 	   .headers["Location"],
+							 	   Cache::CLASS_URL_DURATION)
 		end
 
 		@url = url
@@ -65,7 +66,7 @@ class EdlineClass
 	end
 
 	def save_json		
-		@cache.set(@cache_name, @data)
+		@cache.set(@cache_name, @data, Cache::CLASS_DURATION)
 	end
 
 	def fetch_data
