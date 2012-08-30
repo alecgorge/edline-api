@@ -59,7 +59,7 @@ class EdlineClass
 					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
 				break
 			rescue
-
+				sleep(1.0/5.0)
 			end
 			i += 1
 		end
