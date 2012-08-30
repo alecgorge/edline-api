@@ -51,8 +51,22 @@ class EdlineClass
 		@url = url
 
 		# fetch this class page
-		@client.get(url,
+		c = nil
+		i = 0
+		while c == nil and i < 5
+			begin
+				c = @client.get(url,
 					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
+				break
+			rescue
+
+			end
+			i += 1
+		end
+
+		raise "connection failure!" if c == nil
+
+		return c
 	end
 
 	def extract_json

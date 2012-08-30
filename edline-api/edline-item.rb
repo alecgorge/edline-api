@@ -52,8 +52,20 @@ class EdlineItem
 							 Cache::ITEM_URL_DURATION)
 		end
 
-		c = @client.get(url,
-						:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
+		c = nil
+		i = 0
+		while c == nil and i < 5
+			begin
+				c = @client.get(url,
+					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
+				break
+			rescue
+
+			end
+			i += 1
+		end
+
+		raise "connection failure!" if c == nil
 
 		@urls.push url
 		@contents.push c.content
