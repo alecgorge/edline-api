@@ -40,38 +40,16 @@ class EdlineClass
 		url = @cache.get(cache_name, nil)
 
 		if url == nil or (url != nil and (url =~ URI::regexp).nil?)
-			# unfortunately, cache miss so we have to make a POST and follow the redirect
-			# also we will save it for later
-			f = Fields.submit_event(@client, Fields.class_fields(@id)).headers
-
-			puts "headers: " << f.to_json
-
 			url = @cache.set(cache_name,
-							 f["Location"],
+							 Fields.submit_event(@client, Fields.class_fields(@id))
+							 	.headers["Location"],
 							 	   Cache::CLASS_URL_DURATION)
 		end
 
 		@url = url
 
-		#unless (url =~ URI::regexp).nil?
-			# fetch this class page
-			# c = nil
-			# i = 0
-			# while c == nil and i < 5
-			# 	begin
-			puts "url: " << url.to_s
-			puts "id: " << @id.to_s
-					c = @client.get(url,
-						:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
-			# 		break
-			# 	rescue
-			# 		sleep(1.0/5.0)
-			# 	end
-			# 	i += 1
-			# end
-
-			# raise "connection failure!" if c == nil
-		#end
+		c = @client.get(url,
+				:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
 
 		return c
 	end
