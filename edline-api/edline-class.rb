@@ -56,6 +56,7 @@ class EdlineClass
 		# while c == nil and i < 5
 		# 	begin
 		puts "url: " << url.to_s
+		puts "id: " << @id.to_s
 				c = @client.get(url,
 					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
 		# 		break
