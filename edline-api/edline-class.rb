@@ -28,12 +28,12 @@ class EdlineClass
 	# this is here for efficency to make sure that the user is logged in
 	# it is this
 	def request_class
-		if !@user.isPrimed
+		#if !@user.isPrimed
 			@user.prime_cookies
 
 			@user.user_homepage # no need to check if valid; it is assumed
 							   # to be so if a class is being requested
-		end
+		#end
 
 		# let's see if we already have the path to class cached
 		cache_name = ["classes", @id, "url"]
