@@ -1,0 +1,11 @@
+source 'https://rubygems.org'
+gem 'sinatra'
+gem 'json'
+gem 'sinatra-contrib'
+gem 'nokogiri'
+gem 'httpclient'
+gem 'thin'
+gem 'newrelic_rpm'
+gem 'logger'
+gem 'couchbase'
+
