@@ -39,7 +39,7 @@ class EdlineClass
 		cache_name = ["classes", @id, "url"]
 		url = @cache.get(cache_name, nil)
 
-		if url == nil
+		if url == nil or (url != nil and (url =~ URI::regexp).nil?)
 			# unfortunately, cache miss so we have to make a POST and follow the redirect
 			# also we will save it for later
 			url = @cache.set(cache_name,
@@ -50,7 +50,7 @@ class EdlineClass
 
 		@url = url
 
-		unless (url =~ URI::regexp).nil?
+		#unless (url =~ URI::regexp).nil?
 			# fetch this class page
 			# c = nil
 			# i = 0
@@ -68,7 +68,7 @@ class EdlineClass
 			# end
 
 			# raise "connection failure!" if c == nil
-		end
+		#end
 
 		return c
 	end
