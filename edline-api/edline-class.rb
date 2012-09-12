@@ -51,20 +51,20 @@ class EdlineClass
 		@url = url
 
 		# fetch this class page
-		c = nil
-		i = 0
-		while c == nil and i < 5
-			begin
+		# c = nil
+		# i = 0
+		# while c == nil and i < 5
+		# 	begin
 				c = @client.get(url,
 					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
-				break
-			rescue
-				sleep(1.0/5.0)
-			end
-			i += 1
-		end
+		# 		break
+		# 	rescue
+		# 		sleep(1.0/5.0)
+		# 	end
+		# 	i += 1
+		# end
 
-		raise "connection failure!" if c == nil
+		# raise "connection failure!" if c == nil
 
 		return c
 	end
