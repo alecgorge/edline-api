@@ -81,6 +81,7 @@ class User
 		if cached != nil
 			students = cached
 
+			puts "students: " << students.to_json
 			return Messages.success(fetch_students(students))
 		end
 
