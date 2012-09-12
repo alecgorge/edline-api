@@ -50,23 +50,25 @@ class EdlineClass
 
 		@url = url
 
-		# fetch this class page
-		# c = nil
-		# i = 0
-		# while c == nil and i < 5
-		# 	begin
-		puts "url: " << url.to_s
-		puts "id: " << @id.to_s
-				c = @client.get(url,
-					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
-		# 		break
-		# 	rescue
-		# 		sleep(1.0/5.0)
-		# 	end
-		# 	i += 1
-		# end
+		unless (url =~ URI::regexp).nil?
+			# fetch this class page
+			# c = nil
+			# i = 0
+			# while c == nil and i < 5
+			# 	begin
+			puts "url: " << url.to_s
+			puts "id: " << @id.to_s
+					c = @client.get(url,
+						:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
+			# 		break
+			# 	rescue
+			# 		sleep(1.0/5.0)
+			# 	end
+			# 	i += 1
+			# end
 
-		# raise "connection failure!" if c == nil
+			# raise "connection failure!" if c == nil
+		end
 
 		return c
 	end
