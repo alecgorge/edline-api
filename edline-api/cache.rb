@@ -67,7 +67,6 @@ class Cache
 		
 		v = @client.set(self.key(*name), value, :ttl => length)
 
-		return v unless v == nil
-		return default
+		return value
 	end
 end
