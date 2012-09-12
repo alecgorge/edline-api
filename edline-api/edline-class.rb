@@ -42,9 +42,12 @@ class EdlineClass
 		if url == nil or (url != nil and (url =~ URI::regexp).nil?)
 			# unfortunately, cache miss so we have to make a POST and follow the redirect
 			# also we will save it for later
+			f = Fields.submit_event(@client, Fields.class_fields(@id)).headers
+
+			puts "headers: " << f.to_json
+
 			url = @cache.set(cache_name,
-							 Fields.submit_event(@client, Fields.class_fields(@id))
-							 	   .headers["Location"],
+							 f["Location"],
 							 	   Cache::CLASS_URL_DURATION)
 		end
 
