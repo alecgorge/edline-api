@@ -151,6 +151,8 @@ class EdlineClass
 
 			return @data
 		rescue => e
+			I.increment('errors.invalid.class')
+
 			# gen a temp file for invalid classes
 			d = File.join("logs", "invalid_classes", @id)
 			if !File.directory?(d)

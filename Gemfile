@@ -8,4 +8,4 @@ gem 'thin'
 gem 'newrelic_rpm'
 gem 'logger'
 gem 'couchbase'
-
+gem 'instrumental_agent'

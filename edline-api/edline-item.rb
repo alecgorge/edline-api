@@ -182,6 +182,8 @@ class EdlineItem
 			}
 		}
 
+		I.increment('errors.invalid.item')
+
 		$logger.warn "[ITEM] Unhandlable item: %s" % @id
 
 		@urls = []

@@ -56,16 +56,25 @@ class Cache
 
 		return default if not SHOULD_CACHE
 
-		v = @client.get self.key(*name)
+		I.time_ms('timings.db.get') do
+			v = @client.get self.key(*name)
+		end
 
-		return v unless v == nil
-		return default
+		if v == nil
+			I.increment('cache.get.miss')
+			return default
+		end
+
+		I.increment('cache.get.hit')
+		return v
 	end
 
 	def set(name, value, length = @duration)
 		name = [name] unless name.kind_of? Array
 		
-		v = @client.set(self.key(*name), value, :ttl => length)
+		I.time_ms('timings.db.set') do
+			v = @client.set(self.key(*name), value, :ttl => length)
+		end
 
 		return value
 	end

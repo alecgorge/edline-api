@@ -8,6 +8,8 @@ class EdlineFile
 		q = File.join(*cache_name)
 
 		if !File.exists?(q)
+			I.increment('pages.dynamic.file.miss')
+			
 			FileUtils.mkdir_p(File.join(cache_name[0..-2]), :mode => 0777)
 
 			user = User.new(@username, @password, cache) if user == nil
