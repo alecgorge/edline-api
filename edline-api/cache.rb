@@ -56,6 +56,7 @@ class Cache
 
 		return default if not SHOULD_CACHE
 
+		v = nil
 		I.time_ms('timings.db.get') do
 			v = @client.get self.key(*name)
 		end
