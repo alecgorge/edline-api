@@ -6,6 +6,7 @@ require 'nokogiri'
 require './edline-api/messages'
 require './edline-api/edline-class'
 require 'digest/sha2'
+require 'date'
 
 class User
 	attr_accessor :isPrimed
@@ -20,7 +21,7 @@ class User
 
 		@cache = c
 		@client = HTTPClient.new
-		@client.agent_name = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1"
+		@client.agent_name = "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25"
 		@client.follow_redirect_count = 10
 
 		@isPrimed = false # if loaded from cache, but a class needs a reload
@@ -57,20 +58,6 @@ class User
 		return s
 	end
 
-	def _find_end_pos(child_classes)
-		r_val = child_classes.length - 1
-
-		child_classes.each_with_index { |cl, k|
-			if  cl['title'] == 'More Classes...' ||
-				cl['title'] == '-'
-				r_val = k - 1
-				break
-			end
-		}
-
-		return r_val
-	end
-
 	def data
 		# check if there is a cache of the classes list
 		h = Digest::SHA2.new << @username << ":::" << @password
@@ -100,65 +87,38 @@ class User
 		$logger.info "[CLASS][ORIGINAL] %s" % location
 
 		# new tactic. go striaght to brebeuf. it should format things correctly
-		homepage = @client.get "https://www.edline.net/pages/Brebeuf"
+		Fields.submit_event(@client, Fields.event_fields('myClasses', 'TCNK=mobileHelper'))
+		homepage = @client.get "https://www.edline.net/MyClasses.page"
 
-=begin
-		# old tactic
-		# valid logins go to the school page. we better fetch that.
-		homepage = @client.get location
-		
-		q = false
-		while homepage.headers["Location"] != nil
-			location = homepage.headers["Location"]
-			homepage = @client.get location
-			q = true
-		end
-
-		$logger.info "[CLASS][FINAL] %s" % location if q
-=end
 		begin
 			# start parsing
 			dom = Nokogiri::HTML(homepage.content)
 
-			# looking in the header menu because it is the only place where all the necessary
-			# content exists
-			shortcuts = dom.at_css '#myShortcutsItem'
+			# check for child selector
+			drop_down = dom.at_css 'form[name=viewAsForm]'
 
-=begin
-			# for some reason some people are boot direclty to the manage account screen.
-			# no longer.
-			if shortcuts == nil and dom.at_css('title').content == 'Manage Account'
-				dom = Nokogiri::HTML(@client.get('https://www.edline.net/pages/Brebeuf'))
-			end
-=end
-
-			all_people = shortcuts.css('div[type=menu]')
-
-			# holds all the student information
 			students = {}
 
-			# detect if parent
-			if all_people[0] != nil && all_people[0]['id'].index('userShortcuts') != nil
-				# remove the parent, they don't have classes
-				all_people.shift
+			if drop_down != nil # parent
+				student_ent_ids = dom.css('select[name=viewAsEntid] option')
+				student_ent_ids.shift # remove the parent him/herself
 
-				all_people.each { |child|
-					child_classes = child.children.css('div[type=item]')
-					students[child['title']] = child_classes[0.._find_end_pos(child_classes)]
+				student_ent_ids.each { |option|
+					ent_id = option.attr('value')
+					name = option.content.strip
+
+					student_listing = Fields.submit_event(client, Fields.student_classes(ent_id))
+
+					students[name] = Nokogiri::HTML(student_listing.content).at_css '.navList'
 				}
 			else
-				# get the name
-				name = dom.at_css('#userShortcuts0 a').content
-
-				child_classes = shortcuts.css('div[type=item]')
-
-				students[name] = child_classes[0.._find_end_pos(child_classes)]
+				students[@username] = dom.at_css '.navList'
 			end
 
-			students.each do |name, student| # student is a NodeSet
+			students.each do |name, listing|
 				# get all the Edline IDs for the classes
-				students[name] = student.map { |node|
-					Fields.find_id(node.attr('action'))
+				students[name] = listing.css('a').map { |node|
+					node.attr('href')
 				}
 			end
 		rescue => e
@@ -198,8 +158,8 @@ class User
 		return Messages.success(fetch_students(students))
 	end
 
-	def private_reports
-		cached_data = @cache.get(['private_reports', @username], nil)
+	def private_reports2
+		cached_data = @cache.get(['private_reports2', @username], nil)
 
 		if cached_data == nil
 			if !isPrimed
@@ -209,51 +169,71 @@ class User
 							  # to be so if a class is being requested
 			end
 
-			page = Fields.submit_event(@client, Fields.private_reports_fields())
-
-			while page.headers["Location"] != nil
-				page = @client.get(page.headers['Location'])
-			end
+			Fields.submit_event(@client, Fields.event_fields('privateReports', 'TCNK=mobileHelper'))
+			page = @client.get "https://www.edline.net/UserDocList.page"
 
 			begin
+				# start parsing
 				dom = Nokogiri::HTML(page.content)
 
-				if dom.at_css('title').content.strip == 'Please note:'
-					return [{
-						'date' => Date.new.to_time.utc.to_i,
-						'item_id' => '-1',
-						'class' => 'No private reports',
-						'name' => 'School denied permission'
-					}]
+				# check for child selector
+				drop_down = dom.at_css 'form[name=viewAsForm]'
+
+				students = {}
+
+				if drop_down != nil # parent
+					student_ent_ids = dom.css('select[name=viewAsEntid] option')
+					student_ent_ids.shift # remove the parent him/herself
+
+					student_ent_ids.each { |option|
+						ent_id = option.attr('value')
+						name = option.content.strip
+
+						student_listing = Fields.submit_event(client, Fields.student_classes(ent_id), "https://www.edline.net/post/UserDocList.page")
+
+						students[name] = Nokogiri::HTML(student_listing.content).at_css '.navContainer'
+					}
+				else
+					students[@username] = dom.at_css '.navContainer'
 				end
 
-				cached_data = []
+				cached_data = {}
+				students.each do |student_name, listing|
+					class_names = listing.css '.navSectionBar'
+					sections = listing.css '.navList'
 
-				dom.css('.ed-formTable tr')[2..-1].each { |row|
-					tds = row.css('td')
-					name = tds[5].content.strip
+					reports = []
+					k = 0
+					class_names.each do |v|
+						sections[k].css('a').each do |node|
+							date = Date.parse(node.at_css('.dateNum').content)
+										.to_time
+										.utc
+										.to_i
 
-					if ['Demographics',
-						'Line Schedules',
-						'Grid Schedules'].include? name
-						next
+							name = ""
+							node.at_css('span').children.each do |n|
+								if n.text?
+									name = n.content.strip
+								end
+							end
+							reports.push({
+								'date' => date,
+								'item_id' => node.attr('href'),
+								'class' => v.content.strip,
+								'name' => name
+							})
+						end
+						k = k + 1
 					end
 
-					date = tds[2].content.strip
-					date = Date.new(("20"+date[6, 2]).to_i, # year
-								date[0, 2].to_i,			# month
-								date[3,2].to_i)				# day
-						   .to_time
-						   .utc								# make sure everything is the same timezone
-						   .to_i
+					reports.sort! { |x, y|
+						x['date'] <=> y['date']
+					}.reverse!
 
-					cached_data.push({
-						'date' => date,
-						'item_id' => Fields.find_id(tds[3].at_css('a')['href']),
-						'class' => tds[4].at_css('a').content.strip,
-						'name' => name
-					})
-				}
+					# get all the Edline IDs for the classes
+					cached_data[student_name] = reports
+				end
 			rescue => e
 				# gen a temp file for invalid classes
 				d = File.join("logs", "invalid_private_reports", @username)
@@ -276,12 +256,110 @@ class User
 
 				$logger.warn "[PRIVATE] Unhandlable private reports: %s" % @username
 
-				return [{
+				return {@username => {
 					'date' => Date.new.to_time.utc.to_i,
 					'item_id' => '-1',
 					'class' => 'None available.',
 					'name' => 'Alec is fixing this. Try later.'
-				}]
+				}}
+			end
+		end
+
+		@cache.set(['private_reports2', @username], cached_data, Cache::REPORT_DURATION)
+
+		cached_data
+	end
+
+	def private_reports
+		cached_data = @cache.get(['private_reports', @username], nil)
+
+		if cached_data == nil
+			if !isPrimed
+				prime_cookies
+
+				user_homepage # no need to check if valid; it is assumed
+							  # to be so if a class is being requested
+			end
+
+			Fields.submit_event(@client, Fields.event_fields('privateReports', 'TCNK=mobileHelper'))
+			page = @client.get "https://www.edline.net/UserDocList.page"
+
+			begin
+				# start parsing
+				dom = Nokogiri::HTML(page.content)
+
+				# check for child selector
+				drop_down = dom.at_css 'form[name=viewAsForm]'
+
+				students = {}
+
+				students[@username] = dom.at_css '.navContainer'
+
+				cached_data = []
+				students.each do |student_name, listing|
+					class_names = listing.css '.navSectionBar'
+					sections = listing.css '.navList'
+
+					reports = []
+					k = 0
+					class_names.each do |v|
+						sections[k].css('a').each do |node|
+							date = Date.parse(node.at_css('.dateNum').content)
+										.to_time
+										.utc
+										.to_i
+
+							name = ""
+							node.at_css('span').children.each do |n|
+								if n.text?
+									name = n.content.strip
+								end
+							end
+							reports.push({
+								'date' => date,
+								'item_id' => node.attr('href'),
+								'class' => v.content.strip,
+								'name' => name
+							})
+						end
+						k = k + 1
+					end
+
+					reports.sort! { |x, y|
+						x['date'] <=> y['date']
+					}.reverse!
+
+					# get all the Edline IDs for the classes
+					cached_data = reports
+				end
+			rescue => e
+				# gen a temp file for invalid classes
+				d = File.join("logs", "invalid_private_reports", @username)
+				if !File.directory?(d)
+					FileUtils.mkdir_p(d, :mode => 0777)
+				end
+
+				File.open(File.join(d, "info") << ".json", 'w') { |f|
+					f.write({
+						"username" => @username,
+						"headers" => page.headers,
+						"message" => e.message,
+						"backtrace" => e.backtrace[0..9]
+					}.to_json())
+				}
+
+				File.open(File.join(d, "info") << ".html", 'w') { |f|
+					f.write(page.content)
+				}
+
+				$logger.warn "[PRIVATE] Unhandlable private reports: %s" % @username
+
+				return {" " => {
+					'date' => Date.new.to_time.utc.to_i,
+					'item_id' => '-1',
+					'class' => 'None available.',
+					'name' => 'Alec is fixing this. Try later.'
+				}}
 			end
 		end
 

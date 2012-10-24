@@ -1,0 +1,151 @@
+# Logfile created on 2012-10-23 15:48:30 -0400 by logger.rb/31641
+[10/23/12 15:48:30 -0400 pal-nat184-107-014.itap.purdue.edu (62111)] INFO : Dispatcher: thin
+[10/23/12 15:48:30 -0400 pal-nat184-107-014.itap.purdue.edu (62111)] INFO : Application: EdlineAPI
+[10/23/12 15:48:30 -0400 pal-nat184-107-014.itap.purdue.edu (62111)] WARN : Agent configured not to send data in this environment.
+[10/23/12 15:48:30 -0400 pal-nat184-107-014.itap.purdue.edu (62111)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 62111
+[10/23/12 15:48:30 -0400 pal-nat184-107-014.itap.purdue.edu (62111)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 15:49:39 -0400 pal-nat184-107-014.itap.purdue.edu (62152)] INFO : Dispatcher: thin
+[10/23/12 15:49:39 -0400 pal-nat184-107-014.itap.purdue.edu (62152)] INFO : Application: EdlineAPI
+[10/23/12 15:49:39 -0400 pal-nat184-107-014.itap.purdue.edu (62152)] WARN : Agent configured not to send data in this environment.
+[10/23/12 15:49:39 -0400 pal-nat184-107-014.itap.purdue.edu (62152)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 62152
+[10/23/12 15:49:39 -0400 pal-nat184-107-014.itap.purdue.edu (62152)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 15:50:02 -0400 pal-nat184-107-014.itap.purdue.edu (62183)] INFO : Dispatcher: thin
+[10/23/12 15:50:02 -0400 pal-nat184-107-014.itap.purdue.edu (62183)] INFO : Application: EdlineAPI
+[10/23/12 15:50:02 -0400 pal-nat184-107-014.itap.purdue.edu (62183)] WARN : Agent configured not to send data in this environment.
+[10/23/12 15:50:02 -0400 pal-nat184-107-014.itap.purdue.edu (62183)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 62183
+[10/23/12 15:50:02 -0400 pal-nat184-107-014.itap.purdue.edu (62183)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 15:50:45 -0400 pal-nat184-107-014.itap.purdue.edu (62218)] INFO : Dispatcher: thin
+[10/23/12 15:50:45 -0400 pal-nat184-107-014.itap.purdue.edu (62218)] INFO : Application: EdlineAPI
+[10/23/12 15:50:45 -0400 pal-nat184-107-014.itap.purdue.edu (62218)] WARN : Agent configured not to send data in this environment.
+[10/23/12 15:50:45 -0400 pal-nat184-107-014.itap.purdue.edu (62218)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 62218
+[10/23/12 15:50:45 -0400 pal-nat184-107-014.itap.purdue.edu (62218)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 15:54:53 -0400 pal-nat184-107-014.itap.purdue.edu (62289)] INFO : Dispatcher: thin
+[10/23/12 15:54:53 -0400 pal-nat184-107-014.itap.purdue.edu (62289)] INFO : Application: EdlineAPI
+[10/23/12 15:54:53 -0400 pal-nat184-107-014.itap.purdue.edu (62289)] WARN : Agent configured not to send data in this environment.
+[10/23/12 15:54:53 -0400 pal-nat184-107-014.itap.purdue.edu (62289)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 62289
+[10/23/12 15:54:53 -0400 pal-nat184-107-014.itap.purdue.edu (62289)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 15:57:02 -0400 pal-nat184-107-014.itap.purdue.edu (62361)] INFO : Dispatcher: thin
+[10/23/12 15:57:02 -0400 pal-nat184-107-014.itap.purdue.edu (62361)] INFO : Application: EdlineAPI
+[10/23/12 15:57:02 -0400 pal-nat184-107-014.itap.purdue.edu (62361)] WARN : Agent configured not to send data in this environment.
+[10/23/12 15:57:02 -0400 pal-nat184-107-014.itap.purdue.edu (62361)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 62361
+[10/23/12 15:57:02 -0400 pal-nat184-107-014.itap.purdue.edu (62361)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 17:09:19 -0400 pal-nat184-107-014.itap.purdue.edu (63124)] INFO : Dispatcher: thin
+[10/23/12 17:09:19 -0400 pal-nat184-107-014.itap.purdue.edu (63124)] INFO : Application: EdlineAPI
+[10/23/12 17:09:19 -0400 pal-nat184-107-014.itap.purdue.edu (63124)] WARN : Agent configured not to send data in this environment.
+[10/23/12 17:09:19 -0400 pal-nat184-107-014.itap.purdue.edu (63124)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63124
+[10/23/12 17:09:19 -0400 pal-nat184-107-014.itap.purdue.edu (63124)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 17:13:03 -0400 pal-nat184-107-014.itap.purdue.edu (63200)] INFO : Dispatcher: thin
+[10/23/12 17:13:03 -0400 pal-nat184-107-014.itap.purdue.edu (63200)] INFO : Application: EdlineAPI
+[10/23/12 17:13:03 -0400 pal-nat184-107-014.itap.purdue.edu (63200)] WARN : Agent configured not to send data in this environment.
+[10/23/12 17:13:03 -0400 pal-nat184-107-014.itap.purdue.edu (63200)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63200
+[10/23/12 17:13:03 -0400 pal-nat184-107-014.itap.purdue.edu (63200)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 17:13:29 -0400 pal-nat184-107-014.itap.purdue.edu (63230)] INFO : Dispatcher: thin
+[10/23/12 17:13:29 -0400 pal-nat184-107-014.itap.purdue.edu (63230)] INFO : Application: EdlineAPI
+[10/23/12 17:13:29 -0400 pal-nat184-107-014.itap.purdue.edu (63230)] WARN : Agent configured not to send data in this environment.
+[10/23/12 17:13:29 -0400 pal-nat184-107-014.itap.purdue.edu (63230)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63230
+[10/23/12 17:13:29 -0400 pal-nat184-107-014.itap.purdue.edu (63230)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 17:14:53 -0400 pal-nat184-107-014.itap.purdue.edu (63268)] INFO : Dispatcher: thin
+[10/23/12 17:14:53 -0400 pal-nat184-107-014.itap.purdue.edu (63268)] INFO : Application: EdlineAPI
+[10/23/12 17:14:53 -0400 pal-nat184-107-014.itap.purdue.edu (63268)] WARN : Agent configured not to send data in this environment.
+[10/23/12 17:14:53 -0400 pal-nat184-107-014.itap.purdue.edu (63268)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63268
+[10/23/12 17:14:53 -0400 pal-nat184-107-014.itap.purdue.edu (63268)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 17:15:40 -0400 pal-nat184-107-014.itap.purdue.edu (63307)] INFO : Dispatcher: thin
+[10/23/12 17:15:40 -0400 pal-nat184-107-014.itap.purdue.edu (63307)] INFO : Application: EdlineAPI
+[10/23/12 17:15:40 -0400 pal-nat184-107-014.itap.purdue.edu (63307)] WARN : Agent configured not to send data in this environment.
+[10/23/12 17:15:40 -0400 pal-nat184-107-014.itap.purdue.edu (63307)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63307
+[10/23/12 17:15:40 -0400 pal-nat184-107-014.itap.purdue.edu (63307)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 17:16:47 -0400 pal-nat184-107-014.itap.purdue.edu (63358)] INFO : Dispatcher: thin
+[10/23/12 17:16:47 -0400 pal-nat184-107-014.itap.purdue.edu (63358)] INFO : Application: EdlineAPI
+[10/23/12 17:16:47 -0400 pal-nat184-107-014.itap.purdue.edu (63358)] WARN : Agent configured not to send data in this environment.
+[10/23/12 17:16:47 -0400 pal-nat184-107-014.itap.purdue.edu (63358)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63358
+[10/23/12 17:16:47 -0400 pal-nat184-107-014.itap.purdue.edu (63358)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 17:17:42 -0400 pal-nat184-107-014.itap.purdue.edu (63406)] INFO : Dispatcher: thin
+[10/23/12 17:17:42 -0400 pal-nat184-107-014.itap.purdue.edu (63406)] INFO : Application: EdlineAPI
+[10/23/12 17:17:42 -0400 pal-nat184-107-014.itap.purdue.edu (63406)] WARN : Agent configured not to send data in this environment.
+[10/23/12 17:17:42 -0400 pal-nat184-107-014.itap.purdue.edu (63406)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63406
+[10/23/12 17:17:42 -0400 pal-nat184-107-014.itap.purdue.edu (63406)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 17:18:56 -0400 pal-nat184-107-014.itap.purdue.edu (63453)] INFO : Dispatcher: thin
+[10/23/12 17:18:56 -0400 pal-nat184-107-014.itap.purdue.edu (63453)] INFO : Application: EdlineAPI
+[10/23/12 17:18:56 -0400 pal-nat184-107-014.itap.purdue.edu (63453)] WARN : Agent configured not to send data in this environment.
+[10/23/12 17:18:56 -0400 pal-nat184-107-014.itap.purdue.edu (63453)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63453
+[10/23/12 17:18:56 -0400 pal-nat184-107-014.itap.purdue.edu (63453)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 17:19:41 -0400 pal-nat184-107-014.itap.purdue.edu (63485)] INFO : Dispatcher: thin
+[10/23/12 17:19:41 -0400 pal-nat184-107-014.itap.purdue.edu (63485)] INFO : Application: EdlineAPI
+[10/23/12 17:19:41 -0400 pal-nat184-107-014.itap.purdue.edu (63485)] WARN : Agent configured not to send data in this environment.
+[10/23/12 17:19:41 -0400 pal-nat184-107-014.itap.purdue.edu (63485)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63485
+[10/23/12 17:19:41 -0400 pal-nat184-107-014.itap.purdue.edu (63485)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 17:21:35 -0400 pal-nat184-107-014.itap.purdue.edu (63520)] INFO : Dispatcher: thin
+[10/23/12 17:21:35 -0400 pal-nat184-107-014.itap.purdue.edu (63520)] INFO : Application: EdlineAPI
+[10/23/12 17:21:35 -0400 pal-nat184-107-014.itap.purdue.edu (63520)] WARN : Agent configured not to send data in this environment.
+[10/23/12 17:21:35 -0400 pal-nat184-107-014.itap.purdue.edu (63520)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63520
+[10/23/12 17:21:35 -0400 pal-nat184-107-014.itap.purdue.edu (63520)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 17:22:21 -0400 pal-nat184-107-014.itap.purdue.edu (63558)] INFO : Dispatcher: thin
+[10/23/12 17:22:21 -0400 pal-nat184-107-014.itap.purdue.edu (63558)] INFO : Application: EdlineAPI
+[10/23/12 17:22:21 -0400 pal-nat184-107-014.itap.purdue.edu (63558)] WARN : Agent configured not to send data in this environment.
+[10/23/12 17:22:21 -0400 pal-nat184-107-014.itap.purdue.edu (63558)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63558
+[10/23/12 17:22:21 -0400 pal-nat184-107-014.itap.purdue.edu (63558)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 17:23:37 -0400 pal-nat184-107-014.itap.purdue.edu (63590)] INFO : Dispatcher: thin
+[10/23/12 17:23:37 -0400 pal-nat184-107-014.itap.purdue.edu (63590)] INFO : Application: EdlineAPI
+[10/23/12 17:23:37 -0400 pal-nat184-107-014.itap.purdue.edu (63590)] WARN : Agent configured not to send data in this environment.
+[10/23/12 17:23:37 -0400 pal-nat184-107-014.itap.purdue.edu (63590)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63590
+[10/23/12 17:23:37 -0400 pal-nat184-107-014.itap.purdue.edu (63590)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 17:24:57 -0400 pal-nat184-107-014.itap.purdue.edu (63622)] INFO : Dispatcher: thin
+[10/23/12 17:24:57 -0400 pal-nat184-107-014.itap.purdue.edu (63622)] INFO : Application: EdlineAPI
+[10/23/12 17:24:57 -0400 pal-nat184-107-014.itap.purdue.edu (63622)] WARN : Agent configured not to send data in this environment.
+[10/23/12 17:24:57 -0400 pal-nat184-107-014.itap.purdue.edu (63622)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63622
+[10/23/12 17:24:57 -0400 pal-nat184-107-014.itap.purdue.edu (63622)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 18:57:54 -0400 Alecs-MacBook-Pro.local (63847)] INFO : Dispatcher: thin
+[10/23/12 18:57:54 -0400 Alecs-MacBook-Pro.local (63847)] INFO : Application: EdlineAPI
+[10/23/12 18:57:54 -0400 Alecs-MacBook-Pro.local (63847)] WARN : Agent configured not to send data in this environment.
+[10/23/12 18:57:54 -0400 Alecs-MacBook-Pro.local (63847)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 63847
+[10/23/12 18:57:54 -0400 Alecs-MacBook-Pro.local (63847)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 19:06:13 -0400 Alecs-MacBook-Pro.local (64140)] INFO : Dispatcher: thin
+[10/23/12 19:06:13 -0400 Alecs-MacBook-Pro.local (64140)] INFO : Application: EdlineAPI
+[10/23/12 19:06:13 -0400 Alecs-MacBook-Pro.local (64140)] WARN : Agent configured not to send data in this environment.
+[10/23/12 19:06:13 -0400 Alecs-MacBook-Pro.local (64140)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 64140
+[10/23/12 19:06:13 -0400 Alecs-MacBook-Pro.local (64140)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 19:07:52 -0400 Alecs-MacBook-Pro.local (64334)] INFO : Dispatcher: thin
+[10/23/12 19:07:52 -0400 Alecs-MacBook-Pro.local (64334)] INFO : Application: EdlineAPI
+[10/23/12 19:07:52 -0400 Alecs-MacBook-Pro.local (64334)] WARN : Agent configured not to send data in this environment.
+[10/23/12 19:07:52 -0400 Alecs-MacBook-Pro.local (64334)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 64334
+[10/23/12 19:07:52 -0400 Alecs-MacBook-Pro.local (64334)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 19:10:47 -0400 Alecs-MacBook-Pro.local (64440)] INFO : Dispatcher: thin
+[10/23/12 19:10:47 -0400 Alecs-MacBook-Pro.local (64440)] INFO : Application: EdlineAPI
+[10/23/12 19:10:47 -0400 Alecs-MacBook-Pro.local (64440)] WARN : Agent configured not to send data in this environment.
+[10/23/12 19:10:47 -0400 Alecs-MacBook-Pro.local (64440)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 64440
+[10/23/12 19:10:47 -0400 Alecs-MacBook-Pro.local (64440)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 21:35:54 -0400 Alecs-MacBook-Pro.local (66064)] INFO : Dispatcher: thin
+[10/23/12 21:35:54 -0400 Alecs-MacBook-Pro.local (66064)] INFO : Application: EdlineAPI
+[10/23/12 21:35:54 -0400 Alecs-MacBook-Pro.local (66064)] WARN : Agent configured not to send data in this environment.
+[10/23/12 21:35:54 -0400 Alecs-MacBook-Pro.local (66064)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 66064
+[10/23/12 21:35:54 -0400 Alecs-MacBook-Pro.local (66064)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 21:38:04 -0400 Alecs-MacBook-Pro.local (66137)] INFO : Dispatcher: thin
+[10/23/12 21:38:04 -0400 Alecs-MacBook-Pro.local (66137)] INFO : Application: EdlineAPI
+[10/23/12 21:38:04 -0400 Alecs-MacBook-Pro.local (66137)] WARN : Agent configured not to send data in this environment.
+[10/23/12 21:38:04 -0400 Alecs-MacBook-Pro.local (66137)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 66137
+[10/23/12 21:38:04 -0400 Alecs-MacBook-Pro.local (66137)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 21:40:30 -0400 Alecs-MacBook-Pro.local (66186)] INFO : Dispatcher: thin
+[10/23/12 21:40:30 -0400 Alecs-MacBook-Pro.local (66186)] INFO : Application: EdlineAPI
+[10/23/12 21:40:30 -0400 Alecs-MacBook-Pro.local (66186)] WARN : Agent configured not to send data in this environment.
+[10/23/12 21:40:30 -0400 Alecs-MacBook-Pro.local (66186)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 66186
+[10/23/12 21:40:30 -0400 Alecs-MacBook-Pro.local (66186)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 21:50:13 -0400 Alecs-MacBook-Pro.local (66337)] INFO : Dispatcher: thin
+[10/23/12 21:50:13 -0400 Alecs-MacBook-Pro.local (66337)] INFO : Application: EdlineAPI
+[10/23/12 21:50:13 -0400 Alecs-MacBook-Pro.local (66337)] WARN : Agent configured not to send data in this environment.
+[10/23/12 21:50:13 -0400 Alecs-MacBook-Pro.local (66337)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 66337
+[10/23/12 21:50:13 -0400 Alecs-MacBook-Pro.local (66337)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 21:53:45 -0400 Alecs-MacBook-Pro.local (66396)] INFO : Dispatcher: thin
+[10/23/12 21:53:45 -0400 Alecs-MacBook-Pro.local (66396)] INFO : Application: EdlineAPI
+[10/23/12 21:53:45 -0400 Alecs-MacBook-Pro.local (66396)] WARN : Agent configured not to send data in this environment.
+[10/23/12 21:53:45 -0400 Alecs-MacBook-Pro.local (66396)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 66396
+[10/23/12 21:53:45 -0400 Alecs-MacBook-Pro.local (66396)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 21:55:46 -0400 Alecs-MacBook-Pro.local (66449)] INFO : Dispatcher: thin
+[10/23/12 21:55:46 -0400 Alecs-MacBook-Pro.local (66449)] INFO : Application: EdlineAPI
+[10/23/12 21:55:46 -0400 Alecs-MacBook-Pro.local (66449)] WARN : Agent configured not to send data in this environment.
+[10/23/12 21:55:46 -0400 Alecs-MacBook-Pro.local (66449)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 66449
+[10/23/12 21:55:46 -0400 Alecs-MacBook-Pro.local (66449)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log
+[10/23/12 22:01:29 -0400 Alecs-MacBook-Pro.local (66493)] INFO : Dispatcher: thin
+[10/23/12 22:01:29 -0400 Alecs-MacBook-Pro.local (66493)] INFO : Application: EdlineAPI
+[10/23/12 22:01:29 -0400 Alecs-MacBook-Pro.local (66493)] WARN : Agent configured not to send data in this environment.
+[10/23/12 22:01:29 -0400 Alecs-MacBook-Pro.local (66493)] INFO : New Relic Ruby Agent 3.5.0.1 Initialized: pid = 66493
+[10/23/12 22:01:29 -0400 Alecs-MacBook-Pro.local (66493)] INFO : Agent Log at /Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/log/newrelic_agent.log

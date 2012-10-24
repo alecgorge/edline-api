@@ -2,22 +2,16 @@
 class Fields
 	def self.login_fields(u,p)
 		{
-			'submitEvent' 		=> 1,
-			'TCNK' 				=> 'authenticationEntryComponent',
-			'guestLoginEvent' 	=> '',
-			'enterClicked' 		=> true,
-			'bscf' 				=> '',
-			'bscv' 				=> '',
-			'targetEntid' 		=> '',
-			'ajaxSupported' 	=> 'yes',
-			'screenName' 		=> u,
-			'kclq' 				=> p
+			'loginEvent' 	=> 1,
+			'un' 			=> u,
+			'kscf'			=> p,
+			'login'			=> 'Log In'
 		}
 	end
 
-	def self.class_fields(id)
+	def self.class_fields(id, user_id)
 		self.event_fields('myClassesResourceView',
-						  "TCNK=headerComponent;targetResEntid=#{id};targetViewAsUserEntid=undefined") 
+						  "TCNK=headerComponent;targetResEntid=#{id};targetViewAsUserEntid=#{user_id}") 
 	end
 
 	def self.item_fields(id)
@@ -26,14 +20,15 @@ class Fields
 
 	def self.event_fields(invokeEvent, eventParams)
 		{
-			'invokeEvent' 							=> invokeEvent,
-			'eventParms' 							=> eventParams,
-			'sessionRenewalEnabled' 				=> 'yes',
-			'sessionRenewalIntervalSeconds' 		=> '300',
-			'sessionRenewalMaxNumberOfRenewals' 	=> '25',
-			'sessionIgnoreInitialActivitySeconds' 	=> '90',
-			'sessionHardTimeoutSeconds' 			=> '1200',
-			'ajaxRequestKeySuffix' 					=> '0'
+			'invokeEvent' 	=> invokeEvent,
+			'eventParms' 	=> eventParams
+		}
+	end
+
+	def self.student_classes(viewAsEnt)
+		{
+			'selectViewAsEvent' => '1',
+			'viewAsEntid'		=> viewAsEnt
 		}
 	end
 
@@ -45,10 +40,10 @@ class Fields
 		self.event_fields('viewUserDocList', "undefined")
 	end
 
-	def self.submit_event(client, fields, toURL = 'https://www.edline.net/post/GroupHome.page')
+	def self.submit_event(client, fields, toURL = 'https://www.edline.net/post/MyClasses.page')
 		client.post(toURL,
 					:body => fields,
-					:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'},
+					:header => {'Referer' => 'https://www.edline.net/MyClasses.page'},
 					:follow_redirect => false)
 	end
 
@@ -70,7 +65,7 @@ class Fields
 	end
 
 	def self.find_id(str)
-		m = str.match(/(?:mc|cb|fsv)ViewItm\('([0-9]+)'/)
+		m = str.match(/(?:mc|cb|fsv)ViewItm\('([0-9,]+)'/)
 		return m[1] unless m == nil
 
 		m = str.match(/rlViewItm\('([0-9]+)'/)
