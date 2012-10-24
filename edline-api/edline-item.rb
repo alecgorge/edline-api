@@ -7,6 +7,7 @@ require 'uri'
 class EdlineItem
 	def initialize(id, user)
 		@id = id
+		@url = @id
 		@user = user
 		@type = "html"
 		@content = {
@@ -40,33 +41,8 @@ class EdlineItem
 							   # to be so if a class is being requested
 		end
 
-		# let's see if we already have the path to class cached
-		cache_name = ["items", @id, "url"]
-		url = @cache.get(cache_name, nil)
-
-		if url == nil
-			# unfortunately, cache miss so we have to make a POST and follow the redirect
-			# also we will save it for later
-			url = @cache.set(cache_name,
-							 Fields.smart_submit_event(@client, @id).headers["Location"],
-							 Cache::ITEM_URL_DURATION)
-		end
-
-		c = @client.get(url,
+		c = @client.get(@url,
 				:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
-
-		@urls.push url
-		@contents.push c.content
-		@headers.push c.headers
-
-		while c.headers['Location'] != nil
-			@urls.push c.headers['Location']
-
-			c = @client.get(c.headers['Location'])
-
-			@contents.push c.content
-			@headers.push c.headers
-		end
 
 		return c
 	end
@@ -89,11 +65,17 @@ class EdlineItem
 		return p
 	end
 
+	def get_host_without_www(url)
+		url = "http://#{url}" if URI.parse(url).scheme.nil?
+		host = URI.parse(url).host.downcase
+		host.start_with?('www.') ? host[4..-1] : host
+	end
+
 	def fetch_data
-		if @id[0..1] == "u,"
+		if get_host_without_www(@id) != 'edline.net'
 			return {
 				'type' => 'url',
-				'content' => @id[1..-1]
+				'content' => @id
 			}
 		end
 
@@ -104,8 +86,10 @@ class EdlineItem
 		item_page = self.request_item
 
 		# some items are dumb and redirect to files
+		# WITH MOBILE UI; ALL ARE DUMB.
 		if item_page.headers['Location'] != nil
-			file = URI(item_page.headers["Location"]).path
+			second = @client.get item_page.headers["Location"]
+			file = URI(second.headers["Location"]).path
 
 			@type = 'file'
 			@content = EdlineFile.fetch_file(@cache, file, @user)
@@ -115,47 +99,56 @@ class EdlineItem
 
 		dom = Nokogiri::HTML(item_page.content)
 
-		# check for a HTML view
-		html_block = dom.at_css('#DocViewBoxContent')
-		if html_block != nil
-			@type = 'html'
+		# check for iframe'd content: grades and wysiwyg
+		iframe_block = dom.at_css('#docViewBodyIframe')
+		if iframe_block != nil
+			@type = 'iframe'
 			@content = {
-				'title' => dom.at_css('#edlDocViewBoxAreaTitleSpan').content.strip,
-				'content' => html_block.content
+				'title' => dom.at_css('.mobileTitle').content.strip,
+				'content' => @client.get("https://www.edline.net"+iframe_block.attr('src')).content
 			}
 
 			return _data
 		end
 
-		# check for iframe'd content (usually grades)
-		iframe_block = dom.at_css('#docViewBodyFrame')
-		if iframe_block != nil
-			@type = 'iframe'
-			@content = {
-				'content' => @client.get(iframe_block['src']).content
+		cal = dom.at_css '.calContainer'
+		if cal != nil
+			@type = 'calendar'
+			@content = {}
+			cal.css('.calGroup')[0...-1].each { |day|
+				next if day.at_css('.calDayLabel') == nil
+				title = Date.parse(day.at_css('.calDayLabel').content).strftime('%a, %b %d, %Y')
+				@content[title] = day.css('.navList a').map { |node| 
+					{
+						'name' => node.attr('title'),
+						'item_id' => node.attr('href')
+					}
+				}
 			}
 
 			return _data
 		end
 
 		# check for a directory listing
-		dir = dom.at_css('#fsvItemsTable')
+		dir = dom.at_css('.navList')
 		if dir !=nil
 			@type = 'folder'
-			@content = []
+			@content = dir.css('a').map { |node|
+				{
+					'name' => node.at_css('.navName').content.strip,
+					'isFile' => false,
+					'id' => node.attr('href')
+				}
+			}
 
-			dir.css('a').each { |link|
-				isFile = link['href'][0..6] == '/files/'
-				title = link.content.strip
-				id = isFile ?
-						link['href'] :
-						Fields.find_id(link['href'])
+			return _data
+		end
 
-				@content.push({
-					'name' => title,
-					'isFile' => isFile,
-					'id' => id
-				})
+		content = dom.at_css '.contentArea'
+		if content != nil
+			@type = 'html'
+			@content = {
+				'content' => content.content
 			}
 
 			return _data
