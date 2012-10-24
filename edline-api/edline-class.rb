@@ -9,7 +9,7 @@ class EdlineClass
 		@cache = user.cache
 		@user = user
 		@client = user.client
-		@url = ""
+		@url = @id # with mobile site, we get url :D
 
 		@cache_name = ["classes", @id, "information"]
 
@@ -35,20 +35,7 @@ class EdlineClass
 							   # to be so if a class is being requested
 		end
 
-		# let's see if we already have the path to class cached
-		cache_name = ["classes", @id, "url"]
-		url = @cache.get(cache_name, nil)
-
-		if url == nil or (url != nil and (url =~ URI::regexp).nil?)
-			url = @cache.set(cache_name,
-							 Fields.submit_event(@client, Fields.class_fields(@id))
-							 	.headers["Location"],
-							 	   Cache::CLASS_URL_DURATION)
-		end
-
-		@url = url
-
-		c = @client.get(url,
+		c = @client.get(@url,
 				:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
 
 		return c
@@ -79,71 +66,19 @@ class EdlineClass
 		dom = Nokogiri::HTML(class_page.content)
 
 		begin # we may need to rescue
-			@class_name = dom.at_css('title').content.strip[0..-11] # strip off " Home Page"
-
-			@teacher = dom.at_css('#GroupMessageBoxContent b')
-			if @teacher != nil 
-				@teacher = @teacher.content.strip
-			else
-				@teacher = ""
-			end
-
-			# get calendar items
-			raw_cal = dom.css('#CalendarBoxContent tr')
-
-			raw_cal.each { |row|
-				dates = row.css('td.edlEventDateCell')
-
-				# there are blank tr's because of reasons (???)
-				next if dates.length == 0
-
-				date = dates[0].content.strip
-
-				date = Date.new(("20"+date[6, 2]).to_i, # year
-								date[0, 2].to_i,		# month
-								date[3,2].to_i)			# day
-						   .to_time
-						   .utc							# make sure everything is the same timezone
-						   .to_i
-
-				link = row.css('td.edlEventContentCell a')[0]
-
-				isFile = link['href'][0..6] == '/files/'
-
-				title = link.content.strip
-
-				id = isFile ? link['href'] : Fields.find_id(link['href'])
-
-				@calendar.push({
-					'name' => title,
-					'isFile' => isFile,
-					'id' => id,
-					'date' => date
-				})
-			} unless raw_cal.length == 0
-
-			# get contents
-			raw_contents = dom.css('#ContentsBoxContent div.edlBoxListItem a[id^=contents]')
-
-			raw_contents.each { |link|
-				isFile = link['href'][0..6] == '/files/'
-
-				title = link.content.strip
-
-				id = isFile ? link['href'] : Fields.find_id(link['href'])
-
-				@contents.push({
-					'name' => title,
-					'isFile' => isFile,
-					'id' => id
-				})
-			}
+			@class_name = dom.at_css('title').content.strip
 
 			@data = {
-				'teacher' => @teacher,
+				'teacher' => 'not available',
 				'class_name' => @class_name,
-				'contents' => @contents,
-				'calendar' => @calendar
+				'contents' => dom.css('.navList a').map { |node|
+					{
+						'name' => node.at_css('.navName').content.strip,
+						'isFile' => false,
+						'id' => node.attr('href')
+					}
+				},
+				'calendar' => []
 			}
 
 			self.save_json

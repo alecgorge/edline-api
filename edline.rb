@@ -36,7 +36,7 @@ module Sinatra
   register BeforeOnlyFilter
 end
 
-before_only(['/user', '/user2', '/item', '/file', '/private-reports']) do
+before_only(['/user', '/user2', '/item', '/file', '/private-reports', '/private-reports2']) do
 	headers "Server" => ""
 
 	if(!params.has_key?("u") || !params.has_key?("p"))
@@ -84,6 +84,15 @@ post '/private-reports' do
 	I.time_ms('timings.pages.private-reports') do
 		user = User.new(@username, @password, cache)
 		return Messages.success(user.private_reports).to_json
+	end
+end
+
+post '/private-reports2' do
+	I.increment('pages.dynamic.private-reports')
+
+	I.time_ms('timings.pages.private-reports') do
+		user = User.new(@username, @password, cache)
+		return Messages.success(user.private_reports2).to_json
 	end
 end
 
