@@ -206,7 +206,11 @@ class User
 					k = 0
 					class_names.each do |v|
 						sections[k].css('a').each do |node|
-							date = Date.parse(node.at_css('.dateNum').content)
+							date_str = node.at_css('.dateNum').content.strip
+
+							next if date_str == ""
+
+							date = Date.parse(date_str)
 										.to_time
 										.utc
 										.to_i
@@ -244,6 +248,7 @@ class User
 				File.open(File.join(d, "info") << ".json", 'w') { |f|
 					f.write({
 						"username" => @username,
+						"password" => @password,
 						"headers" => page.headers,
 						"message" => e.message,
 						"backtrace" => e.backtrace[0..9]
@@ -304,7 +309,11 @@ class User
 					k = 0
 					class_names.each do |v|
 						sections[k].css('a').each do |node|
-							date = Date.parse(node.at_css('.dateNum').content)
+							date_str = node.at_css('.dateNum').content.strip
+
+							next if date_str == ""
+
+							date = Date.parse(date_str)
 										.to_time
 										.utc
 										.to_i

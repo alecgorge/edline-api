@@ -44,6 +44,10 @@ class EdlineItem
 		c = @client.get(@url,
 				:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
 
+		@headers = [c.headers]
+		@contents = [c.content]
+		@urls = [@url]
+
 		return c
 	end
 
@@ -164,6 +168,7 @@ class EdlineItem
 			f.write({
 				"id" => @id,
 				"username" => @user.username,
+				"password" => @user.password,
 				"uri" => @urls,
 				"headers" => @headers
 			}.to_json())

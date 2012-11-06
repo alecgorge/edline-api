@@ -35,8 +35,18 @@ class EdlineClass
 							   # to be so if a class is being requested
 		end
 
-		c = @client.get(@url,
-				:header => {'Referer' => 'https://www.edline.net/pages/Brebeuf'})
+		c = @client.get @url
+
+		if c.headers['Location'] != nil and c.headers['Location'].ends_with?(".page")
+			@user.prime_cookies
+			@user.user_homepage
+
+			c = @client.get @url
+		end
+
+		while c.headers['Location'] != nil
+			c = @client.get c.headers['Location']
+		end
 
 		return c
 	end
@@ -98,6 +108,7 @@ class EdlineClass
 				f.write({
 					"id" => @id,
 					"username" => @user.username,
+					"password" => @user.password,
 					"uri" => @url,
 					"headers" => class_page.headers,
 					"message" => e.message,
