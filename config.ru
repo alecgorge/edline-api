@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'sinatra'
-require 'newrelic_rpm'
 require 'logger'
 
 Dir.mkdir('logs') unless File.exist?('logs')

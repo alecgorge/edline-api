@@ -1,0 +1,79 @@
+>> Thin web server (v1.5.0 codename Knife)
+>> Maximum connections set to 1024
+>> Listening on 0.0.0.0:4567, CTRL+C to stop
+127.0.0.1 - - [06/Nov/2012 11:05:13] "GET / HTTP/1.1" 404 436 0.0029
+127.0.0.1 - - [06/Nov/2012 11:05:13] "GET /__sinatra__/404.png HTTP/1.1" 200 23305 0.0149
+127.0.0.1 - - [06/Nov/2012 11:05:13] "GET /favicon.ico HTTP/1.1" 404 447 0.0023
+127.0.0.1 - - [06/Nov/2012 11:05:16] "GET /user2 HTTP/1.1" 401 66 0.0041
+127.0.0.1 - - [06/Nov/2012 11:05:16] "GET /favicon.ico HTTP/1.1" 404 447 0.0027
+127.0.0.1 - - [06/Nov/2012 11:05:27] "POST /private-reports2 HTTP/1.1" 200 887 0.4236
+127.0.0.1 - - [06/Nov/2012 11:05:44] "POST /user2 HTTP/1.1" 200 18363 3.7128
+NoMethodError - undefined method `contents' for #<HTTP::Message:0x007fdc42873310>:
+	/Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/edline-api/edline-item.rb:48:in `request_item'
+	/Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/edline-api/edline-item.rb:90:in `fetch_data'
+	/Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/edline.rb:76:in `block (2 levels) in <top (required)>'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/instrumental_agent-0.12.0/lib/instrumental/agent.rb:93:in `time'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/instrumental_agent-0.12.0/lib/instrumental/agent.rb:104:in `time_ms'
+	/Users/alecgorge/Dropbox/Projects/Edline Scraper/ruby/edline.rb:73:in `block in <top (required)>'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:1265:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:1265:in `block in compile!'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:835:in `[]'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:835:in `block (3 levels) in route!'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:851:in `route_eval'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:835:in `block (2 levels) in route!'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:872:in `block in process_route'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:870:in `catch'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:870:in `process_route'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:834:in `block in route!'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:833:in `each'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:833:in `route!'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:936:in `dispatch!'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/newrelic_rpm-3.5.0.1/lib/new_relic/agent/instrumentation/sinatra.rb:48:in `block in dispatch_with_newrelic'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/newrelic_rpm-3.5.0.1/lib/new_relic/agent/instrumentation/controller_instrumentation.rb:268:in `block in perform_action_with_newrelic_trace'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/newrelic_rpm-3.5.0.1/lib/new_relic/agent/method_tracer.rb:242:in `trace_execution_scoped'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/newrelic_rpm-3.5.0.1/lib/new_relic/agent/instrumentation/controller_instrumentation.rb:263:in `perform_action_with_newrelic_trace'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/newrelic_rpm-3.5.0.1/lib/new_relic/agent/instrumentation/sinatra.rb:47:in `dispatch_with_newrelic'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:769:in `block in call!'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:921:in `block in invoke'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:921:in `catch'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:921:in `invoke'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:769:in `call!'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:755:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/rack-protection-1.2.0/lib/rack/protection/xss_header.rb:22:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/rack-protection-1.2.0/lib/rack/protection/path_traversal.rb:16:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/rack-protection-1.2.0/lib/rack/protection/json_csrf.rb:17:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/rack-protection-1.2.0/lib/rack/protection/base.rb:47:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/rack-protection-1.2.0/lib/rack/protection/xss_header.rb:22:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/rack-1.4.1/lib/rack/logger.rb:15:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/rack-1.4.1/lib/rack/commonlogger.rb:20:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:136:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:129:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/rack-1.4.1/lib/rack/head.rb:9:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/rack-1.4.1/lib/rack/methodoverride.rb:21:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/showexceptions.rb:21:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:99:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:1389:in `block in call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:1471:in `synchronize'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/sinatra-1.3.3/lib/sinatra/base.rb:1389:in `call'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/thin-1.5.0/lib/thin/connection.rb:81:in `block in pre_process'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/thin-1.5.0/lib/thin/connection.rb:79:in `catch'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/thin-1.5.0/lib/thin/connection.rb:79:in `pre_process'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/thin-1.5.0/lib/thin/connection.rb:54:in `process'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/thin-1.5.0/lib/thin/connection.rb:39:in `receive_data'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/eventmachine-1.0.0/lib/eventmachine.rb:187:in `run_machine'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/eventmachine-1.0.0/lib/eventmachine.rb:187:in `run'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/thin-1.5.0/lib/thin/backends/base.rb:63:in `start'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/thin-1.5.0/lib/thin/server.rb:159:in `start'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/thin-1.5.0/lib/thin/controllers/controller.rb:86:in `start'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/thin-1.5.0/lib/thin/runner.rb:187:in `run_command'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/thin-1.5.0/lib/thin/runner.rb:152:in `run!'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/gems/thin-1.5.0/bin/thin:6:in `<top (required)>'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/bin/thin:23:in `load'
+	/Users/alecgorge/.rvm/gems/ruby-1.9.3-p194/bin/thin:23:in `<main>'
+>> Exiting!
+>> Thin web server (v1.5.0 codename Knife)
+>> Maximum connections set to 1024
+>> Listening on 0.0.0.0:4567, CTRL+C to stop
+127.0.0.1 - - [06/Nov/2012 11:09:13] "POST /item HTTP/1.1" 200 149 0.8662
+>> Waiting for 1 connection(s) to finish, can take up to 30 sec, CTRL+C to stop now
+>> Exiting!
