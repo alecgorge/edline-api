@@ -7,6 +7,7 @@ development = false
 
 require 'instrumental_agent'
 I = Instrumental::Agent.new('d516c180b6091e7dd1093a924c9a6591')
+PM = PirateMetrics::Agent.new('u8s4915lf9v4r4pcn4191k580h37', :enabled => true)
 
 require 'sinatra'
 require './edline-api/messages'
@@ -44,8 +45,13 @@ before_only(['/user', '/user2', '/item', '/file', '/private-reports', '/private-
 		halt 401, Messages.json, Messages.no_auth_vars.to_json
 	else
 		I.increment('hits.auth.has_auth')
+
 		@username = params['u']
 		@password = params['p']
+
+		PM.acquisition({ :email => @username })
+		PM.activation({ :email => @username })
+		PM.retention({ :email => @username })
 	end
 
 	content_type 'application/json' # charset breaks android

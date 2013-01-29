@@ -8,3 +8,5 @@ gem 'thin'
 gem 'logger'
 gem 'couchbase'
 gem 'instrumental_agent'
+gem 'pirate_metrics_agent'
+
