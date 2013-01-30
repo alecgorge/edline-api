@@ -7,8 +7,9 @@ development = false
 
 require 'instrumental_agent'
 require 'pirate_metrics_agent'
-I = Instrumental::Agent.new('d516c180b6091e7dd1093a924c9a6591')
-PM = PirateMetrics::Agent.new('u8s4915lf9v4r4pcn4191k580h37', :enabled => true)
+
+I = Instrumental::Agent.new(ENV['INSTRUMENTAL_KEY'])
+PM = PirateMetrics::Agent.new(ENV['PIRATE_METRICS_KEY'], :enabled => true)
 
 require 'sinatra'
 require './edline-api/messages'
