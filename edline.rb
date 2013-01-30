@@ -50,8 +50,6 @@ before_only(['/user', '/user2', '/item', '/file', '/private-reports', '/private-
 		@username = params['u']
 		@password = params['p']
 
-		PM.acquisition({ :email => @username })
-		PM.activation({ :email => @username })
 		PM.retention({ :email => @username })
 	end
 
