@@ -1,0 +1,41 @@
+{
+	"name": "edline-api",
+	"preferGlobal": false,
+	"version": "1.0.0",
+	"author": "Alec Gorge <alecgorge@gmail.com>",
+	"description": "An API server over a scraping mechanism for edline.net. Works for students, parents and teachers.",
+	"bin": {
+		"edline-api-server": "./bin/edline-api-server"
+	},
+	"scripts": {
+		"start": "coffee ./bin/edline-api-server",
+		"predeploy": "echo This will be run before deploying the app",
+		"postdeploy": "echo This will be run after deploying the app"
+	},
+	"main": "coffee ./lib/edline-api",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/alecgorge/edline-api.git"
+	},
+	"keywords": [
+		"api",
+		"scraper",
+		"edline"
+	],
+	"dependencies": {
+		"request": "2.14.x",
+		"memcache": "0.3.x",
+		"optimist": "0.3.x",
+		"winston": "0.6.x",
+		"underscore": "1.x",
+		"async": "0.2.x",
+		"cheerio": "0.10.x",
+		"mkdirp": "0.3.x",
+		"express": "3.1.x"
+	},
+	"analyze": false,
+	"license": "MIT",
+	"engines": {
+		"node": ">=0.8"
+	}
+}

@@ -1,0 +1,8 @@
+#!/usr/bin/env coffee
+
+edline 	= require '../lib/edline-api'
+argv 	= require('optimist').default('p', 3081).argv
+
+server = new edline.Server
+
+server.start argv.p
