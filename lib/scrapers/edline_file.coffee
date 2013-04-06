@@ -17,7 +17,7 @@ class EdlineFile
 
 			logger.debug "...done. #{exists}"
 			if not exists
-				mkdirp cache_name.slice(0, -1).join('/'), 0o0777, (err) ->
+				mkdirp cache_name.slice(0, -1).join('/'), 0777, (err) ->
 					throw err if err
 
 					outputFile = fs.createWriteStream q
