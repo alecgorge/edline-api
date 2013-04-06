@@ -1,3 +1,0 @@
-#!/bin/bash
-
-thin -C thin/thin.yml -R config.ru start

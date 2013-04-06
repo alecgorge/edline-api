@@ -1,3 +1,0 @@
-#!/bin/bash
-
-thin -C thin/thin-dev.yml -R config.ru stop
