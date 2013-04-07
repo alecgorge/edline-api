@@ -8,11 +8,11 @@
 		"edline-api-server": "./bin/edline-api-server"
 	},
 	"scripts": {
-		"start": "coffee ./bin/edline-api-server",
+		"start": "node_modules/coffee-script/bin/coffee bin/edline-api-server ./bin/edline-api-server",
 		"predeploy": "echo This will be run before deploying the app",
 		"postdeploy": "echo This will be run after deploying the app"
 	},
-	"main": "coffee ./lib/edline-api",
+	"main": "node_modules/coffee-script/bin/coffee bin/edline-api-server ./lib/edline-api",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/alecgorge/edline-api.git"
@@ -23,6 +23,7 @@
 		"edline"
 	],
 	"dependencies": {
+		"coffee-script": "1.2.0",
 		"request": "2.14.x",
 		"memcache": "0.3.x",
 		"optimist": "0.3.x",
