@@ -9,6 +9,7 @@
 	},
 	"scripts": {
 		"start": "node_modules/coffee-script/bin/coffee bin/edline-api-server ./bin/edline-api-server",
+		"debug": "node_modules/coffee-script/bin/coffee --nodejs --debug bin/edline-api-server ./bin/edline-api-server",
 		"predeploy": "echo This will be run before deploying the app",
 		"postdeploy": "echo This will be run after deploying the app"
 	},

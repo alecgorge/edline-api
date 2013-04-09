@@ -1,4 +1,3 @@
-request = require './customized_request'
 Cache 	= require '../cache'
 async	= require 'async'
 cheerio = require 'cheerio'
@@ -37,7 +36,7 @@ class EdlineItem
 	request_item: (cb) ->
 		_do = () =>
 			logger.debug "User prime state: #{@user.isPrimed}"
-			c = request.get
+			c = @user.request.get
 					uri: @id
 					header:
 						'Referer': 'https://www.edline.net/pages/Brebeuf'
@@ -47,8 +46,8 @@ class EdlineItem
 		if not @user.isPrimed
 			logger.debug "User is not primed! Priming..."
 			async.series [
-				(next) => @user.prime_cookies(next, request),
-				(next) => @user.user_homepage(next, request)
+				(next) => @user.prime_cookies(next, @user.request),
+				(next) => @user.user_homepage(next, @user.request)
 			], _do
 		else
 			_do()
@@ -82,12 +81,12 @@ class EdlineItem
 				# WITH MOBILE UI; ALL ARE DUMB.
 				if res.headers["location"]?
 					logger.debug "Found redirect #{res.headers.location}"
-					request res.headers.location, (file_err, file_res, file_data) =>
+					@user.request res.headers.location, (file_err, file_res, file_data) =>
 						file = url.parse(file_res.headers.location).path
 
 						logger.debug "Found file: #{file}"
 
-						EdlineFile.fetch_file @cache, file, request, (json) =>
+						EdlineFile.fetch_file @cache, file, @user.request, (json) =>
 							@save_data "file", json
 							cb Messages.success @_data
 
@@ -99,7 +98,7 @@ class EdlineItem
 				if $iframe_block.length > 0
 					logger.debug "Found an iframe: https://www.edline.net#{$iframe_block.attr('src')}"
 
-					request "https://www.edline.net" + $iframe_block.attr('src'), (err, res, iframe_body) =>
+					@user.request "https://www.edline.net" + $iframe_block.attr('src'), (err, res, iframe_body) =>
 						logger.debug "Loaded the iframe!"
 						@save_data "iframe", title: $('.mobileTitle').text().trim(), content: iframe_body
 

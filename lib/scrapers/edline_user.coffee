@@ -1,19 +1,21 @@
 Cache 	= require '../cache'
 EdlineClass = require './edline_class'
 
-request = require './customized_request'
+util	= require 'util'
 logger	= require 'winston'
 Messages= require '../messages'
 Fields 	= require '../fields'
 async	= require 'async'
 cheerio = require 'cheerio'
 _ 		= require 'underscore'
+request = (require './customized_request').httpClient()
 
 EdlineItem = require './edline_item'
 
 class EdlineUser
 	constructor: (@username, @password, @cache) ->
 		@isPrimed = false
+		@request = request
 
 	prime_cookies: (next, req = request) =>
 		that = @
@@ -50,7 +52,7 @@ class EdlineUser
 					logger.debug "#{id} fetched!"
 
 					s[name] = {} unless s[name]?
-					s[name][data['class_name']] unless s[name][data['class_name']]?
+					s[name][data['class_name']] = {} unless s[name][data['class_name']]?
 
 					s[name][data['class_name']] = data
 
@@ -66,13 +68,12 @@ class EdlineUser
 
 
 	process_students: ($, students, cb) ->
-		logger.debug "Processing #{students.length} students for the edline IDs..."
+		logger.debug "Processing #{Object.keys(students).length} students for the edline IDs..."
 
 		# get all the edline IDs
 		_.each students, ($listing, name) ->
 			students[name] = $listing.find('a').map (v) -> $(this).attr('href')
 
-		logger.debug "Done! #{JSON.stringify(students)}."
 		@cache.set ["users", @username, @password, "classes"], students, Cache.durations.USER_DURATION
 
 		logger.debug "Fetching students..."
@@ -127,19 +128,20 @@ class EdlineUser
 
 		logger.debug "Requesting #{cache_name} from cache..."
 		@cache.get cache_name, (cached) =>
-			if cached
+			logger.debug "User cache? #{cached}"
+			if cached != null
 				logger.debug "Cache hit!"
 				_out.fetch_students cached, (total_data) ->
-					cb Message.success total_data
+					cb Messages.success total_data
 
 				return
 
 			logger.debug "Cache miss! Priming cookies..."
-			_out.prime_cookies (err, res, body) ->
+			_out.prime_cookies (err, res, body) =>
 				_out.isPrimed = true
 
 				logger.debug "Cookies primed! Requesting homepage..."
-				_out.user_homepage (err, page, body) ->
+				_out.user_homepage (err, page, body) =>
 					logger.debug "Got homepage! Location header: #{page.headers["location"]}"
 
 					if page.headers["location"] and (page.headers["location"] is "http://www.edline.net/Notification.page" or page.headers["location"].indexOf("error.html") > -1)

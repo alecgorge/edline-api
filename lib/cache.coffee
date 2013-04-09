@@ -16,10 +16,11 @@ class Cache
 		REPORT_DURATION		: 60 * 60 * 2			# 2 hours
 
 	constructor: (host, port, defaultDuration) ->
-		@setupClient new memcache.Client(port, host)
-		@duration = defaultDuration
+		@duration = Cache.durations.ITEM_DURATION
 		@shouldCache = true
 		@shouldFlatten = true
+
+		@setupClient new memcache.Client(port, host)
 
 	setupClient: (client) ->
 		@client = client
@@ -39,6 +40,7 @@ class Cache
 			logger.error "Error with the memcache server on #{client.host}:#{client.port}:"
 			logger.error e
 
+		logger.info 'Attempting to connect to memcache server...'
 		client.connect()
 
 	key: (parts) ->
@@ -64,6 +66,8 @@ class Cache
 			cb res
 
 	set: (name, value, length = @duration, cb = false) ->
+		# logger.debug "Setting #{name} to #{JSON.stringify(value)}"
+
 		key = @key name
 
 		if _.isFunction length
@@ -77,10 +81,10 @@ class Cache
 		if not _.isString value
 			value = JSON.stringify value
 
+		cb(null, value) if _.isFunction cb
 		@client.set key, value, (err, res) ->
 			logger.error(e) if err
-
-			cb(err, res) if _.isFunction cb
 		, length
+		return
 
 module.exports = Cache

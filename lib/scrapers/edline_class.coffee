@@ -1,6 +1,7 @@
 cheerio = require 'cheerio'
 Cache = require '../cache'
-request = require './customized_request'
+logger	= require 'winston'
+async = require 'async'
 
 class EdlineClass
 	constructor: (@id, @user) ->
@@ -13,13 +14,13 @@ class EdlineClass
 
 	save_data: (data) ->
 		@_data = data
-		@cache.set @cache_name, (err, resp) ->
+		@cache.set @cache_name, data,(err, resp) ->
 			false
 		, Cache.durations.CLASS_DURATION
 
 	request_class: (cb) ->
 		_do = () =>
-			c = request.get
+			c = @user.request.get
 					uri: @id
 					followRedirect: true
 				, (err, res, body) ->
@@ -27,8 +28,8 @@ class EdlineClass
 
 		if not @user.isPrimed
 			async.series [
-				@user.prime_cookies,
-				@user.user_homepage
+				(next) => @user.prime_cookies(next, @user.request),
+				(next) => @user.user_homepage(next, @user.request)
 			], _do
 		else
 			_do()
@@ -37,11 +38,14 @@ class EdlineClass
 		if @_data != null
 			return cb @_data
 
+		logger.debug "Requesting #{@cache_name.join(',')}"			
 		@cache.get @cache_name, (cached) =>
-			if cached
-				return cb @_data
+			logger.debug "Class cache? #{cached}"
+			if cached != null
+				return cb cached
 
 			@request_class (res, class_page) =>
+				logger.info "Loaded class."
 				$ = cheerio.load class_page
 
 				@save_data {
