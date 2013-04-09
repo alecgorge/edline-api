@@ -84,11 +84,11 @@ class EdlineUser
 		logger.debug "Got MyClasses.page! Loading cheerio..."
 		$ = cheerio.load body
 
-		drop_down = $('form[name=viewAsForm')
+		drop_down = $('form[name=viewAsForm]')
 
 		students = {}
 
-		if drop_down # parent. multiple students. ick.
+		if drop_down.length > 0 # parent. multiple students. ick.
 			student_ent_ids = $('select[name=viewAsEntid] option')
 
 			# remove the parent him/herself

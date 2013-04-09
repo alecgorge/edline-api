@@ -17,7 +17,7 @@ class Cache
 
 	constructor: (host, port, defaultDuration) ->
 		@duration = Cache.durations.ITEM_DURATION
-		@shouldCache = true
+		@shouldCache = false
 		@shouldFlatten = true
 
 		@setupClient new memcache.Client(port, host)
