@@ -7,15 +7,28 @@ EdlineItem = require './scrapers/edline_item'
 EdlineFile = require './scrapers/edline_file'
 request = (require './scrapers/customized_request').httpClient()
 
-winston = require 'winston'
+_winston = require 'winston'
+_winston.setLevels debug: 0, info: 1, warn: 2, error: 3
+
+winston = new (_winston.Logger)({
+	transports: [
+		new _winston.transports.Console level: "info",
+	],
+	exceptionHandlers: [
+		new _winston.transports.File filename: 'exceptions.log'
+	]
+
+})
+
+winston.setLevels debug: 0, info: 1, warn: 2, error: 3
+
 cache = new Cache "edline-api.alecgorge.com", 11211
 
-winston.loggers.add 'invalid',
+_winston.loggers.add 'invalid',
 	file:
 		filename: 'invalid.log'
 
 winston.exitOnError = false
-winston.handleExceptions new winston.transports.File filename: 'exceptions.log'
 
 class Server
 	constructor: ()->
@@ -27,10 +40,10 @@ class Server
 		@app.use '/cache/__files__', express.static(__dirname + '/../cache/__files__')
 		@app.use express.bodyParser()
 
-		@app.post '/user2', authMiddleware(), (req, res) ->
+		@app.post '/user2', authMiddleware(), (req, res) =>
 			@uCount += 1
 
-			winston.debug "Number #{@uCount}/#{@uCount+@iCount} since #{@date}: Got a request for #{req.body.u}"
+			winston.info "Number #{@uCount}/#{@uCount+@iCount} since #{@date}: Got a request for #{req.body.u}"
 
 			user = new EdlineUser req.body.u, req.body.p, cache
 
@@ -39,10 +52,10 @@ class Server
 
 				res.json json
 
-		@app.post '/item', authMiddleware(), (req, res) ->
+		@app.post '/item', authMiddleware(), (req, res) =>
 			@iCount += 1
 
-			winston.debug "Number #{@iCount}/#{@uCount+@iCount} since #{@date}: Got a request for #{req.body.u} -> #{req.body.id}"
+			winston.info "Number #{@iCount}/#{@uCount+@iCount} since #{@date}: Got a request for #{req.body.u} -> #{req.body.id}"
 
 			user = new EdlineUser req.body.u, req.body.p, cache
 			item = new EdlineItem req.body.id, user
