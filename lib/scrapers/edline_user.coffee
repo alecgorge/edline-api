@@ -17,19 +17,19 @@ class EdlineUser
 		@isPrimed = false
 		@request = request
 
-	prime_cookies: (next, req = request) =>
+	prime_cookies: (next) =>
 		that = @
 
 		logger.debug "Priming cookies..."
-		req.get "https://www.edline.net/Index.page", (err, x, y) ->
+		request.get "https://www.edline.net/Index.page", (err, x, y) ->
 			logger.debug "...done priming cookies!"
 
 			that.isPrimed = true unless err
 			next(err, x, y)
 
-	user_homepage: (next, req = request) ->
+	user_homepage: (next) ->
 		logger.debug "Requesting homepage..."
-		req.post
+		request.post
 			uri: "https://www.edline.net/post/Index.page"
 			form: Fields.login_fields(@username, @password)
 			followRedirect: false
