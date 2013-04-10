@@ -12,7 +12,8 @@ _winston = require 'winston'
 
 winston = new (_winston.Logger)({
 	transports: [
-		new _winston.transports.Console #level: "info",
+		new _winston.transports.Console, #level: "info",
+		new _winston.transports.File filename: "edline-api.log"
 	],
 	exceptionHandlers: [
 		new _winston.transports.File filename: 'exceptions.log'
