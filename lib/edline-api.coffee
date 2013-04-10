@@ -8,11 +8,11 @@ EdlineFile = require './scrapers/edline_file'
 request = (require './scrapers/customized_request').httpClient()
 
 _winston = require 'winston'
-_winston.setLevels debug: 0, info: 1, warn: 2, error: 3
+#_winston.setLevels debug: 0, info: 1, warn: 2, error: 3
 
 winston = new (_winston.Logger)({
 	transports: [
-		new _winston.transports.Console level: "info",
+		new _winston.transports.Console #level: "info",
 	],
 	exceptionHandlers: [
 		new _winston.transports.File filename: 'exceptions.log'
@@ -20,7 +20,7 @@ winston = new (_winston.Logger)({
 
 })
 
-winston.setLevels debug: 0, info: 1, warn: 2, error: 3
+#winston.setLevels debug: 0, info: 1, warn: 2, error: 3
 
 cache = new Cache "edline-api.alecgorge.com", 11211
 
